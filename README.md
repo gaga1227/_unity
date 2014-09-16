@@ -1,4 +1,4 @@
 _unity
 ======
 
-GAGA's Unity Game Development Repo
+GAGA's Unity Game Development Learning Repo
