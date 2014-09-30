@@ -41,3 +41,15 @@ TagManager:
     userID: 0
     uniqueID: 0
     locked: 0
+  - name: Cats
+    userID: 1
+    uniqueID: 3143426895
+    locked: 0
+  - name: Enemies
+    userID: 2
+    uniqueID: 4235620965
+    locked: 0
+  - name: Zombie
+    userID: 3
+    uniqueID: 2813132737
+    locked: 0

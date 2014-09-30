@@ -134,7 +134,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3.20000005
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -167,6 +167,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 953135690}
   - 212: {fileID: 953135689}
+  - 114: {fileID: 953135691}
   m_Layer: 0
   m_Name: zombie
   m_TagString: Untagged
@@ -192,7 +193,7 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2813132737
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -208,6 +209,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &953135691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 953135688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 112602cb8495540ab9447c82898f2c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300002, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  - {fileID: 21300004, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  - {fileID: 21300006, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  - {fileID: 21300008, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  - {fileID: 21300006, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  - {fileID: 21300004, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
+  framesPerSecond: 10
+  moveSpeed: 2
+  turnSpeed: 5
 --- !u!1 &1123037051
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +314,7 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 3143426895
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9b6d230ecf0384a33bf4dbab2358375a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -342,7 +364,7 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 4235620965
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f57bceb3789bb48cdb4ba7330b09c8a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
