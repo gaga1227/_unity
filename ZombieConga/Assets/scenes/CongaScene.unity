@@ -227,7 +227,7 @@ MonoBehaviour:
   - {fileID: 21300008, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
   - {fileID: 21300006, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
   - {fileID: 21300004, guid: eeecc532c4edb40218e999e7373c451a, type: 3}
-  framesPerSecond: 10
+  spriteFramesPerSecond: 10
   moveSpeed: 2
   turnSpeed: 5
 --- !u!1 &1123037051

@@ -8,11 +8,11 @@ public class ZombieAnimator : MonoBehaviour {
 
 	//sprite sequence array
 	public Sprite[] sprites;
-	//fps (placeholder for time in seconds)
-	public float framesPerSecond;
-	//move speed
+	//sprite frames played in a second
+	public float spriteFramesPerSecond;
+	//move speed (per frame)
 	public float moveSpeed;
-	//turn speed
+	//turn speed (per frame)
 	public float turnSpeed;
 
 	//------------------------------------------------------------------------
@@ -40,8 +40,9 @@ public class ZombieAnimator : MonoBehaviour {
 		//get elapsed time (Time.timeSinceLevelLoad) returns time in seconds
 		//then get current frame index by multiply with fps
 		//and finally converts to int
-		int index = (int)(Time.timeSinceLevelLoad * framesPerSecond);
-		Debug.Log (Time.timeSinceLevelLoad);
+		int index = (int)(Time.timeSinceLevelLoad * spriteFramesPerSecond);
+		//Debug.Log ("timeSinceLevelLoad: " + Time.timeSinceLevelLoad);
+		//Debug.Log ("spriteFramesPerSecond: " + spriteFramesPerSecond);
 
 		//divide frame index by sprites sequence count
 		//and use remainder as current sprite index
@@ -59,6 +60,7 @@ public class ZombieAnimator : MonoBehaviour {
 		//on input
 		if(Input.GetButton("Fire1")) {
 			//get target position
+			//using camera to convert input pos to world coordinates
 			Vector3 moveToward = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			//update current direction vector
 			moveDirection = moveToward - currentPosition;
@@ -68,22 +70,27 @@ public class ZombieAnimator : MonoBehaviour {
 			//Unit length vectors are convenient because you can multiply them 
 			//by scalar values e.g. speed
 			moveDirection.Normalize();
+			//Debug.Log ("moveDirection: " + moveDirection);
 		}
 
-		//calculate updated target position
-		Vector3 target = moveDirection * moveSpeed + currentPosition;
+		//calculate target position
+		//based on current position, plus per frame increment
+		//towards move direction
+		Vector3 targetPosition = moveDirection * moveSpeed + currentPosition;
 		//apply interpolated position to self
-		transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
-		Debug.Log (Time.deltaTime);
+		//use deltaTime makes updates based on time instead of frames
+		transform.position = Vector3.Lerp(currentPosition, targetPosition, Time.deltaTime);
+		//Debug.Log ("Time.deltaTime: " + Time.deltaTime);
 
 		//------------------------------------------------------------------------
 		//animating game object with rotation
 
 		//get target angle from current move direction
-		//Atan2 returns in radians
+		//Atan2 returns in radians, then convert to degree
 		float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 		//update rotation with interpolation
 		//rotation takes Quaternion angles and Slerp is recommended
+		//rotation should apply to Z axis in 2D mode
 		transform.rotation = Quaternion.Slerp(
 			transform.rotation, 
 			Quaternion.Euler(0,0,targetAngle),
