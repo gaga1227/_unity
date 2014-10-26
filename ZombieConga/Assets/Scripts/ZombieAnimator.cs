@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Used in CongaScenePart1
+/// </summary>
+using UnityEngine;
 using System.Collections;
 
 public class ZombieAnimator : MonoBehaviour {

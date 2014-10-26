@@ -16,7 +16,7 @@ public class ZombieController : MonoBehaviour {
 	
 	//move direction (with init value)
 	private Vector3 moveDirection = Vector3.right;
-	
+
 	//on start
 	void Start () {
 
@@ -70,5 +70,29 @@ public class ZombieController : MonoBehaviour {
 			Quaternion.Euler(0,0,targetAngle),
 			turnSpeed * Time.deltaTime);
 		
+	}
+
+	//------------------------------------------------------------------------
+	//physics colliders
+	
+	//this makes private var accessible in unity inspector
+	[SerializeField]
+	//declare single array of any size, of type 'PolygonCollider2D'
+	private PolygonCollider2D[] colliders;
+	//current collider index, default is 0, which is matched in unity editor
+	private int currentColliderIndex = 0;
+	
+	//anim clip event handler
+	//updates current collider from sprite frames
+	public void SetColliderForSprite( int spriteNum ) {
+		colliders[currentColliderIndex].enabled = false;
+		currentColliderIndex = spriteNum;
+		colliders[currentColliderIndex].enabled = true;
+	}
+
+	//------------------------------------------------------------------------
+	//collision handler
+	void OnTriggerEnter2D( Collider2D other ) {
+		Debug.Log ("Hit " + other.gameObject);
 	}
 }
