@@ -3,8 +3,8 @@ using System.Collections;
 
 public class ScreenRelativePosition : MonoBehaviour {
 
-	//------------------------------------------------------------------------
 	//public vars
+	//------------------------------------------------------------------------
 
 	//position parameters
 	public enum ScreenEdge {LEFT, RIGHT, TOP, BOTTOM};
@@ -20,7 +20,7 @@ public class ScreenRelativePosition : MonoBehaviour {
 		Camera camera = Camera.main;
 		//get new position to edges
 		switch(screenEdge) {
-			//center of the camera view is 0,0, which is set in unity
+			//camera is positioned at (0,0) in unity
 			//'camera.orthographicSize' half of the view height,
 			//which equals to the distance from center to each vertical edge
 			//use 'camera.aspect' to calculate distance from center to each horizontal edge

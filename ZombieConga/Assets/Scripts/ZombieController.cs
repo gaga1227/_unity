@@ -2,31 +2,33 @@
 using System.Collections;
 
 public class ZombieController : MonoBehaviour {
-	
-	//------------------------------------------------------------------------
+	#region vars
 	//public vars
+	//------------------------------------------------------------------------
 	
 	//move speed (per frame)
 	public float moveSpeed;
 	//turn speed (per frame)
 	public float turnSpeed;
 	
-	//------------------------------------------------------------------------
 	//private vars
+	//------------------------------------------------------------------------
 	
 	//move direction (with init value)
 	private Vector3 moveDirection = Vector3.right;
+	#endregion
 
-	//on start
+	#region on start
 	void Start () {
-
+		
 	}
-	
-	//on frame
+	#endregion
+
+	#region on frame
 	void Update () {
 		
-		//------------------------------------------------------------------------
 		//animating game object towards direction
+		//------------------------------------------------------------------------
 		
 		//get self position
 		Vector3 currentPosition = transform.position;
@@ -56,8 +58,8 @@ public class ZombieController : MonoBehaviour {
 		transform.position = Vector3.Lerp(currentPosition, targetPosition, Time.deltaTime);
 		//Debug.Log ("Time.deltaTime: " + Time.deltaTime);
 		
-		//------------------------------------------------------------------------
 		//animating game object with rotation
+		//------------------------------------------------------------------------
 		
 		//get target angle from current move direction
 		//Atan2 returns in radians, then convert to degree
@@ -69,11 +71,16 @@ public class ZombieController : MonoBehaviour {
 			transform.rotation, 
 			Quaternion.Euler(0,0,targetAngle),
 			turnSpeed * Time.deltaTime);
-		
-	}
 
-	//------------------------------------------------------------------------
+		//check and keep self within screen bounds
+		//------------------------------------------------------------------------
+		EnforceBounds();
+	}
+	#endregion
+
+	#region physics colliders
 	//physics colliders
+	//------------------------------------------------------------------------
 	
 	//this makes private var accessible in unity inspector
 	[SerializeField]
@@ -89,10 +96,55 @@ public class ZombieController : MonoBehaviour {
 		currentColliderIndex = spriteNum;
 		colliders[currentColliderIndex].enabled = true;
 	}
-
-	//------------------------------------------------------------------------
+	
 	//collision handler
+	//------------------------------------------------------------------------
 	void OnTriggerEnter2D( Collider2D other ) {
 		Debug.Log ("Hit " + other.gameObject);
 	}
+	#endregion
+
+	#region keeping self in view bounds
+	private void EnforceBounds() {
+		//get current position, retains z position
+		Vector3 newPosition = transform.position; 
+		//get camera ref
+		Camera mainCamera = Camera.main;
+		//get camera position: (0,0)
+		Vector3 cameraPosition = mainCamera.transform.position;
+
+		//get distances from view center to edges
+		//given camera is positioned at (0,0)
+		float xOffset = 0.7f;
+		float yOffset = 0.7f;
+		float xDist = mainCamera.aspect * mainCamera.orthographicSize - xOffset;
+		float yDist = mainCamera.orthographicSize - yOffset;
+
+		//calculate positions for all edges
+		float xMin = cameraPosition.x - xDist;
+		float yMin = cameraPosition.y - yDist;
+		float xMax = cameraPosition.x + xDist;
+		float yMax = cameraPosition.y + yDist;
+		
+		//when out of horizontal bounds
+		if ( newPosition.x < xMin || newPosition.x > xMax ) {
+			//clamp overlimit position to edge position
+			//either left and right edge position
+			newPosition.x = Mathf.Clamp( newPosition.x, xMin, xMax );
+			//revert move direction
+			moveDirection.x = -moveDirection.x;
+		}
+		//when out of vertical bounds
+		if ( newPosition.y < yMin || newPosition.y > yMax ) {
+			//clamp overlimit position to edge position
+			//either top and bottom edge position
+			newPosition.y = Mathf.Clamp( newPosition.y, yMin, yMax );
+			//revert move direction
+			moveDirection.y = -moveDirection.y;
+		}
+
+		//apply new position to self
+		transform.position = newPosition;
+	}
+	#endregion
 }

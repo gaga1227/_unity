@@ -2,39 +2,45 @@
 using System.Collections;
 
 public class EnemyController : MonoBehaviour {
-
-	//------------------------------------------------------------------------
+	#region vars
 	//public vars
-
+	//------------------------------------------------------------------------
+	
 	//moving speed
 	public float speed = -1;
-
-	//------------------------------------------------------------------------
+	
 	//private vars
-
+	//------------------------------------------------------------------------
+	
 	//spawn point's transform
 	private Transform spawnPoint;
+	#endregion
 
-	//on start
+	#region on start
 	void Start () {
 		//find spawn point game object and assign its transform to var
 		spawnPoint = GameObject.Find("SpawnPoint").transform;
 	}
-	
-	//on frame
-	void Update () {
-	
-	}
+	#endregion
 
-	//on fixed frame
+	#region on frame
+	void Update () {
+		
+	}
+	#endregion
+
+	#region on fixed frame
 	void FixedUpdate () {
 		//assign speed to physics rigibody,
 		//this makes gameobject move to left
 		rigidbody2D.velocity = new Vector2(speed, 0);
 	}
+	#endregion
 
+	#region handlers
 	//invisible handler
 	//called when gameobject is out of camera view
+	//------------------------------------------------------------------------
 	void OnBecameInvisible() {
 		//get main vamera
 		Camera camera = Camera.main;
@@ -52,4 +58,5 @@ public class EnemyController : MonoBehaviour {
 			//keep current z pos
 			transform.position.z );
 	}
+	#endregion
 }
