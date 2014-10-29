@@ -38,8 +38,8 @@ public class EnemyController : MonoBehaviour {
 	#endregion
 
 	#region handlers
-	//invisible handler
-	//called when gameobject is out of camera view
+	//out of view handler
+	//called when gameobject is out of ALL cameras views
 	//------------------------------------------------------------------------
 	void OnBecameInvisible() {
 		//get main vamera
