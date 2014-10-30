@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+//import generic package to use 'list' type
+using System.Collections.Generic;
 
 public class ZombieController : MonoBehaviour {
 	#region vars
@@ -16,6 +18,8 @@ public class ZombieController : MonoBehaviour {
 	
 	//move direction (with init value)
 	private Vector3 moveDirection = Vector3.right;
+	//declare a list of transform for cats conga line
+	private List<Transform> congaLine = new List<Transform>();
 	#endregion
 
 	#region on start
@@ -100,7 +104,20 @@ public class ZombieController : MonoBehaviour {
 	//collision handler
 	//------------------------------------------------------------------------
 	void OnTriggerEnter2D( Collider2D other ) {
-		Debug.Log ("Hit " + other.gameObject);
+		GameObject target = other.gameObject;
+		Debug.Log ("Hit " + target);
+		if(target.CompareTag("cat")) {
+			//get proper target's transform as follow target
+			Transform followTarget = (congaLine.Count == 0) ? transform : congaLine[congaLine.Count-1];
+			//get cat gameobject's script component and call its public method
+			//to make target start tailing followTarget, with zombie's speeds
+			target.GetComponent<CatController>().JoinConga( followTarget, moveSpeed, turnSpeed );
+			//finally push target's transform to list
+			congaLine.Add( target.transform );
+		}
+		else if (target.CompareTag("enemy")) {
+			Debug.Log ("Pardon me, ma'am.");
+		}
 	}
 	#endregion
 

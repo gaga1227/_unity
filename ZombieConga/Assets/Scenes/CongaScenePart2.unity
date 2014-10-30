@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0ffae12b74b4941b41378cd9a3d626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 2.5
   turnSpeed: 5
   colliders:
   - {fileID: 953135693}
@@ -767,7 +767,7 @@ GameObject:
   - 114: {fileID: 1713180774}
   m_Layer: 0
   m_Name: enemy
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
