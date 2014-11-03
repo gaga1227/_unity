@@ -104,14 +104,20 @@ public class ZombieController : MonoBehaviour {
 	//collision handler
 	//------------------------------------------------------------------------
 	void OnTriggerEnter2D( Collider2D other ) {
+		//cat (used for animations)
 		GameObject target = other.gameObject;
-		Debug.Log ("Hit " + target);
+		//Cat Carrier (used for tailing motion)
+		Transform targetCarrier = other.transform.parent;
+		Debug.Log ("Hit " + targetCarrier + "'s " + target);
+		//on colliding with others
 		if(target.CompareTag("cat")) {
 			//get proper target's transform as follow target
 			Transform followTarget = (congaLine.Count == 0) ? transform : congaLine[congaLine.Count-1];
-			//get cat gameobject's script component and call its public method
-			//to make target start tailing followTarget, with zombie's speeds
-			target.GetComponent<CatController>().JoinConga( followTarget, moveSpeed, turnSpeed );
+			//get cat gameobject's parent's script component and call its public method
+			//to make targetCarrier start tailing followTarget, with zombie's speeds
+			//use 'targetCarrier' for tailing manipulation because gameobject with animation(cat)
+			//cannot be manipulated on 'transform', so does it on 'targetCarrier'
+			targetCarrier.GetComponent<CatController>().JoinConga( followTarget, moveSpeed, turnSpeed );
 			//finally push target's transform to list
 			congaLine.Add( target.transform );
 		}
