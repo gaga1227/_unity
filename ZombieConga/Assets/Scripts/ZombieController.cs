@@ -20,6 +20,13 @@ public class ZombieController : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.right;
 	//declare a list of transform for cats conga line
 	private List<Transform> congaLine = new List<Transform>();
+
+	//invinsible flag and period
+	private bool isInvincible = false;
+	private float timeSpentInvincible;
+
+	//player lives
+	private int lives = 3;
 	#endregion
 
 	#region on start
@@ -76,6 +83,32 @@ public class ZombieController : MonoBehaviour {
 			Quaternion.Euler(0,0,targetAngle),
 			turnSpeed * Time.deltaTime);
 
+		//invincible time period control and visual
+		//------------------------------------------------------------------------
+		if (isInvincible) {
+			//vars to control the blinking animaiton
+			float timePeriodTreshold = 3f;
+			float frequencyFactor = 0.3f;
+			float blinkSpanTreshold = 0.15f;
+			//adds time period per frame to total time period
+			timeSpentInvincible += Time.deltaTime;
+			//if total time period is still within threshold
+			//blinking gameobject via switching renderer
+			if (timeSpentInvincible < timePeriodTreshold) {
+				//remainder affects the frequency of the blink
+				float remainder = timeSpentInvincible % frequencyFactor;
+				//set renderer's flag directly depending on time period spent
+				renderer.enabled = remainder > blinkSpanTreshold;
+				//Debug.Log("Remainder: " + remainder);
+			}
+			//if reached treshold, switch off blinking
+			//and turn off invincible
+			else {
+				renderer.enabled = true;
+				isInvincible = false;
+			}
+		}
+
 		//check and keep self within screen bounds
 		//------------------------------------------------------------------------
 		EnforceBounds();
@@ -109,7 +142,7 @@ public class ZombieController : MonoBehaviour {
 		//Cat Carrier (used for tailing motion)
 		Transform targetCarrier = other.transform.parent;
 		Debug.Log ("Hit " + targetCarrier + "'s " + target);
-		//on colliding with others
+		//on colliding with others with 'cat' tag
 		if(target.CompareTag("cat")) {
 			//get proper target's transform as follow target
 			Transform followTarget = (congaLine.Count == 0) ? transform : congaLine[congaLine.Count-1];
@@ -119,10 +152,42 @@ public class ZombieController : MonoBehaviour {
 			//cannot be manipulated on 'transform', so does it on 'targetCarrier'
 			targetCarrier.GetComponent<CatController>().JoinConga( followTarget, moveSpeed, turnSpeed );
 			//finally push target's transform to list
+			//only cat item gets added, cat carrier has no collider
 			congaLine.Add( target.transform );
+			//if got enough items, WIN the game
+			if (congaLine.Count >= 5) {
+				Application.LoadLevel("CongaScenePart2");
+				Debug.Log("You won!");
+			}
 		}
-		else if (target.CompareTag("enemy")) {
-			Debug.Log ("Pardon me, ma'am.");
+		//on colliding with others with 'enemy' tag while NOT invincible
+		else if (!isInvincible && target.CompareTag("enemy")) {
+			//reduce player lives by one and check game state
+			//if no lives left set game to LOSE
+			if (--lives <= 0) {
+				Application.LoadLevel("CongaScenePart2");
+				Debug.Log("You lost!");
+			}
+			//if not losing yet, continue...
+			else {
+				//make self invincible (to ignore further collisions for a period)
+				isInvincible = true;
+				//resets invincible time period
+				timeSpentInvincible = 0;
+				//items to remove in conga line
+				int itemsToRemove = 2;
+				//remove cat carriers in conga line by 'itemsToRemove' times until the last one
+				for( int i = 0; i < itemsToRemove && congaLine.Count > 0; i++ ) {
+					//index for last item in conga list
+					int lastIdx = congaLine.Count-1;
+					//get last cat item's transform from list
+					Transform cat = congaLine[ lastIdx ];
+					//remove last item in conga list
+					congaLine.RemoveAt(lastIdx);
+					//get cat carrier's script comp and call its public method
+					cat.parent.GetComponent<CatController>().ExitConga();
+				}
+			}
 		}
 	}
 	#endregion

@@ -76,11 +76,29 @@ public class CatController : MonoBehaviour {
 		cat.collider2D.enabled = false;
 		cat.GetComponent<Animator>().SetBool( "InConga", true );
 	}
+
+	//method to turn gameobject back to normal
+	//and position it around view center
+	public void ExitConga() {
+		//get current camera position (view center)
+		Vector3 cameraPos = Camera.main.transform.position;
+		//update cat carrier's target position based on camera position and follow target's Z pos
+		//once updated, the code in 'update' will transition it
+		targetPosition = new Vector3(
+			cameraPos.x + Random.Range(-1.5f, 1.5f),
+			cameraPos.y + Random.Range(-1.5f, 1.5f),
+			followTarget.position.z);
+		//get cat prefab's transform
+		Transform cat = transform.GetChild(0);
+		//turn off zombie animation clip via animator parameter
+		cat.GetComponent<Animator>().SetBool("InConga", false);
+	}
 	#endregion
 
 	#region handlers
 	//anim clip event handler (from cat)
 	//method to update current stage target position, from follow target
+	//once updated, the code in 'update' will transition it
 	public void UpdateTargetPosition() {
 		targetPosition = followTarget.position;
 	}

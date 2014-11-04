@@ -14,12 +14,17 @@ public class EnemyController : MonoBehaviour {
 	
 	//spawn point's transform
 	private Transform spawnPoint;
+
+	//main camera ref
+	private Camera mainCam;
 	#endregion
 
 	#region on start
 	void Start () {
 		//find spawn point game object and assign its transform to var
 		spawnPoint = GameObject.Find("SpawnPoint").transform;
+		//cache main camera ref
+		mainCam = Camera.main;
 	}
 	#endregion
 
@@ -42,10 +47,12 @@ public class EnemyController : MonoBehaviour {
 	//called when gameobject is out of ALL cameras views
 	//------------------------------------------------------------------------
 	void OnBecameInvisible() {
-		//get main vamera
-		Camera camera = Camera.main;
+		//causes error on trying to find main camera
+		//when it doesn't exist anymore (e.g. stop scene)
+		//Camera camera = Camera.main;
+
 		//exit if no target camera
-		if (camera == null) return;
+		if (mainCam == null) return;
 		//get upper threshold of spawn point's y position
 		//which is half of view height minus half of gameobject's height (rough estimate)
 		float yMax = camera.orthographicSize - 0.8f;
