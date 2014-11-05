@@ -55,7 +55,7 @@ public class EnemyController : MonoBehaviour {
 		if (mainCam == null) return;
 		//get upper threshold of spawn point's y position
 		//which is half of view height minus half of gameobject's height (rough estimate)
-		float yMax = camera.orthographicSize - 0.8f;
+		float yMax = mainCam.orthographicSize - 0.8f;
 		//update self position
 		transform.position = new Vector3(
 			//use spawn position's x pos

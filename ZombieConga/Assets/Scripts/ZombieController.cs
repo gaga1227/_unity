@@ -12,6 +12,9 @@ public class ZombieController : MonoBehaviour {
 	public float moveSpeed;
 	//turn speed (per frame)
 	public float turnSpeed;
+	//audio refs
+	public AudioClip enemyContactSound;
+	public AudioClip catContactSound;
 	
 	//private vars
 	//------------------------------------------------------------------------
@@ -137,13 +140,16 @@ public class ZombieController : MonoBehaviour {
 	//collision handler
 	//------------------------------------------------------------------------
 	void OnTriggerEnter2D( Collider2D other ) {
-		//cat (used for animations)
+		//get collision target's gameobject
 		GameObject target = other.gameObject;
-		//Cat Carrier (used for tailing motion)
-		Transform targetCarrier = other.transform.parent;
-		Debug.Log ("Hit " + targetCarrier + "'s " + target);
 		//on colliding with others with 'cat' tag
 		if(target.CompareTag("cat")) {
+			//play SE
+			if (audio) {
+				audio.PlayOneShot(catContactSound);
+			}
+			//Cat Carrier (used for tailing motion)
+			Transform targetCarrier = other.transform.parent;
 			//get proper target's transform as follow target
 			Transform followTarget = (congaLine.Count == 0) ? transform : congaLine[congaLine.Count-1];
 			//get cat gameobject's parent's script component and call its public method
@@ -155,17 +161,21 @@ public class ZombieController : MonoBehaviour {
 			//only cat item gets added, cat carrier has no collider
 			congaLine.Add( target.transform );
 			//if got enough items, WIN the game
-			if (congaLine.Count >= 5) {
-				Application.LoadLevel("CongaScenePart2");
+			if (congaLine.Count >= 15) {
+				Application.LoadLevel("WinScene");
 				Debug.Log("You won!");
 			}
 		}
 		//on colliding with others with 'enemy' tag while NOT invincible
 		else if (!isInvincible && target.CompareTag("enemy")) {
+			//play SE
+			if (audio) {
+				audio.PlayOneShot(enemyContactSound);
+			}
 			//reduce player lives by one and check game state
 			//if no lives left set game to LOSE
 			if (--lives <= 0) {
-				Application.LoadLevel("CongaScenePart2");
+				Application.LoadLevel("LoseScene");
 				Debug.Log("You lost!");
 			}
 			//if not losing yet, continue...
