@@ -110,6 +110,16 @@ public class ZombieController : MonoBehaviour {
 				renderer.enabled = true;
 				isInvincible = false;
 			}
+
+			//set back zombie after bump into enemy
+			float setbackTime = 0.2f;
+			if (timeSpentInvincible < setbackTime) {
+				rigidbody2D.velocity = new Vector2(
+					moveDirection.x * moveSpeed * -3,
+					moveDirection.y * moveSpeed * -3);
+			} else {
+				rigidbody2D.velocity = new Vector2(0, 0);
+			}
 		}
 
 		//check and keep self within screen bounds
@@ -161,7 +171,7 @@ public class ZombieController : MonoBehaviour {
 			//only cat item gets added, cat carrier has no collider
 			congaLine.Add( target.transform );
 			//if got enough items, WIN the game
-			if (congaLine.Count >= 15) {
+			if (congaLine.Count >= 30) {
 				Application.LoadLevel("WinScene");
 				Debug.Log("You won!");
 			}
@@ -185,7 +195,7 @@ public class ZombieController : MonoBehaviour {
 				//resets invincible time period
 				timeSpentInvincible = 0;
 				//items to remove in conga line
-				int itemsToRemove = 2;
+				int itemsToRemove = 3;
 				//remove cat carriers in conga line by 'itemsToRemove' times until the last one
 				for( int i = 0; i < itemsToRemove && congaLine.Count > 0; i++ ) {
 					//index for last item in conga list

@@ -28,17 +28,14 @@ public class EnemyController : MonoBehaviour {
 	}
 	#endregion
 
-	#region on frame
-	void Update () {
-		
-	}
-	#endregion
-
 	#region on fixed frame
 	void FixedUpdate () {
-		//assign speed to physics rigibody,
-		//this makes gameobject move to left
-		rigidbody2D.velocity = new Vector2(speed, 0);
+		//delay enemy's entrance
+		if ( Time.timeSinceLevelLoad > 5 ) {
+			//assign speed to physics rigibody,
+			//this makes gameobject move to left
+			rigidbody2D.velocity = new Vector2(speed, 0);
+		}
 	}
 	#endregion
 
