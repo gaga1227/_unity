@@ -9,6 +9,8 @@ public class MouseController : MonoBehaviour {
 	#region public vars
 	//jetpack force
 	public float jetpackForce = 75.0f;
+	//moving speed
+	public float forwardMovementSpeed = 3.0f;
 	#endregion
 
 	#region onStart
@@ -31,6 +33,12 @@ public class MouseController : MonoBehaviour {
 		if (jetpackActive) {
 			rigidbody2D.AddForce(new Vector2(0, jetpackForce));
 		}
+
+		//set moving speed to self via rigidbody2D
+		//sets the velocity x-component, without affecting y-component
+		Vector2 newVelocity = rigidbody2D.velocity;
+		newVelocity.x = forwardMovementSpeed;
+		rigidbody2D.velocity = newVelocity;
 	}
 	#endregion
 }
