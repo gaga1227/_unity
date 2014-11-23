@@ -127,6 +127,7 @@ GameObject:
   - 50: {fileID: 48919044}
   - 114: {fileID: 48919045}
   - 114: {fileID: 48919046}
+  - 95: {fileID: 48919047}
   m_Layer: 0
   m_Name: mouse
   m_TagString: Untagged
@@ -177,6 +178,7 @@ Transform:
   m_LocalPosition: {x: -3.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 534419142}
   - {fileID: 1628695776}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -208,6 +210,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jetpackForce: 75
   forwardMovementSpeed: 3
+  jetpack: {fileID: 1628695778}
+  groundCheckTransform: {fileID: 534419142}
+  groundCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &48919046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +230,21 @@ MonoBehaviour:
   - {fileID: 100000, guid: 1e7c71f4224974759934b4b00621cfb9, type: 2}
   currentRooms:
   - {fileID: 618659103}
+--- !u!95 &48919047
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 48919040}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 48ce4bcfc7b4349d3b7f1da955aadb5c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 1
+  m_ApplyRootMotion: 0
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &107264921
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +488,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 618659104}
   m_RootOrder: 3
+--- !u!1 &534419141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 534419142}
+  m_Layer: 0
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: -1500306622, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &534419142
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534419141}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -.699999988, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 48919043}
+  m_RootOrder: 0
 --- !u!1 &618659103
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +660,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1500699891}
   - 61: {fileID: 1500699890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -671,7 +720,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 48919043}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!199 &1628695777
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0

@@ -2,20 +2,28 @@
 using System.Collections;
 
 public class MouseController : MonoBehaviour {
-
-	#region private vars
-	#endregion
-
-	#region public vars
+	#region vars
 	//jetpack force
 	public float jetpackForce = 75.0f;
 	//moving speed
 	public float forwardMovementSpeed = 3.0f;
+	//jetpack particle comp ref
+	public ParticleSystem jetpack;
+	//ground check gameobject ref
+	public Transform groundCheckTransform;
+	//ground check layermask ref
+	//layermask works as a filter, returns any object tagged with a certain layer
+	public LayerMask groundCheckLayerMask;
+	//grounded flag
+	private bool grounded;
+	//animator ref
+	Animator animator;
 	#endregion
 
 	#region onStart
 	void Start () {
-		
+		//cache animator comp
+		animator = GetComponent<Animator>();
 	}
 	#endregion
 
@@ -39,6 +47,39 @@ public class MouseController : MonoBehaviour {
 		Vector2 newVelocity = rigidbody2D.velocity;
 		newVelocity.x = forwardMovementSpeed;
 		rigidbody2D.velocity = newVelocity;
+
+		//check grounded status
+		UpdateGroundedStatus();
+
+		//updates jetpack particles
+		AdjustJetpack(jetpackActive);
+	}
+	#endregion
+
+	#region Methods
+	//check grounded status
+	//------------------------------------------------------------------------
+	void UpdateGroundedStatus() {
+		//local grounded flag
+		grounded = Physics2D.OverlapCircle(
+			//use position of the ground check object as center
+			groundCheckTransform.position,
+			//do an overlap check with a radius of 0.1f
+			0.1f,
+			//with any object returns true with the layermask filter
+			groundCheckLayerMask);
+		//pass grounded flag result to animator parameter
+		//to switch animations
+		animator.SetBool("grounded", grounded);
+	}
+
+	//updates jetpack particles
+	//------------------------------------------------------------------------
+	void AdjustJetpack (bool jetpackActive) {
+		//switch on/off depends on grounded
+		jetpack.enableEmission = !grounded;
+		//adjust emission rate depends on user action
+		jetpack.emissionRate = jetpackActive ? 300.0f : 50.0f; 
 	}
 	#endregion
 }

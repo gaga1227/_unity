@@ -120,7 +120,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400014}
   - 61: {fileID: 6100002}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
