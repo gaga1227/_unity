@@ -18,6 +18,8 @@ public class MouseController : MonoBehaviour {
 	private bool grounded;
 	//animator ref
 	Animator animator;
+	//mouse death flag
+	private bool dead = false;
 	#endregion
 
 	#region onStart
@@ -37,16 +39,23 @@ public class MouseController : MonoBehaviour {
 	void FixedUpdate () {
 		//enable jetpack on click
 		bool jetpackActive = Input.GetButton("Fire1");
+
+		//jetpack can only be on when NOT dead
+		jetpackActive = jetpackActive && !dead;
+
 		//apply jetpack force if enabled
 		if (jetpackActive) {
 			rigidbody2D.AddForce(new Vector2(0, jetpackForce));
 		}
 
-		//set moving speed to self via rigidbody2D
-		//sets the velocity x-component, without affecting y-component
-		Vector2 newVelocity = rigidbody2D.velocity;
-		newVelocity.x = forwardMovementSpeed;
-		rigidbody2D.velocity = newVelocity;
+		//apply moving force if NOT dead
+		if (!dead) {
+			//set moving speed to self via rigidbody2D
+			//sets the velocity x-component, without affecting y-component
+			Vector2 newVelocity = rigidbody2D.velocity;
+			newVelocity.x = forwardMovementSpeed;
+			rigidbody2D.velocity = newVelocity;
+		}
 
 		//check grounded status
 		UpdateGroundedStatus();
@@ -80,6 +89,24 @@ public class MouseController : MonoBehaviour {
 		jetpack.enableEmission = !grounded;
 		//adjust emission rate depends on user action
 		jetpack.emissionRate = jetpackActive ? 300.0f : 50.0f; 
+	}
+
+	//hit by laser handler
+	//------------------------------------------------------------------------
+	void HitByLaser(Collider2D laserCollider) {
+		//set death status
+		dead = true;
+		//and set animator params
+		animator.SetBool("dead", true);
+	}
+	#endregion
+
+	#region Handlers
+	//collision handlers
+	//------------------------------------------------------------------------
+	void OnTriggerEnter2D(Collider2D collider) {
+		//trigger hit by laser
+		HitByLaser(collider);
 	}
 	#endregion
 }
