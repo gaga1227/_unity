@@ -3,17 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GeneratorScript : MonoBehaviour {
-	
-	#region private vars
+
+	#region vars
 	//cache view width
 	private float screenWidthInPoints;
-	#endregion
-	
-	#region public vars
+
+	//for rooms
+	//------------------------------------------------------------------------
 	//array of available room prefabs
 	public GameObject[] availableRooms;
 	//list of rooms generated in scene
 	public List<GameObject> currentRooms;
+
+	//for objects
+	//------------------------------------------------------------------------
+	//array of available object prefabs
+	public GameObject[] availableObjects;
+	//list of objects generated in scene
+	public List<GameObject> objects;
+	//objects variation params
+	public float objectsMinDistance = 5.0f;
+	public float objectsMaxDistance = 10.0f;
+	public float objectsMinY = -1.4f;
+	public float objectsMaxY = 1.4f;
+	public float objectsMinRotation = -45.0f;
+	public float objectsMaxRotation = 45.0f;
 	#endregion
 	
 	#region onStart
@@ -27,6 +41,7 @@ public class GeneratorScript : MonoBehaviour {
 	
 	#region onUpdate
 	void Update () {
+
 	}
 	#endregion
 
@@ -34,6 +49,8 @@ public class GeneratorScript : MonoBehaviour {
 	void FixedUpdate () {
 		//check if room is required
 		GenerateRoomIfRequired();
+		//check if object is required
+		GenerateObjectsIfRequired();
 	}
 	#endregion
 
@@ -64,6 +81,7 @@ public class GeneratorScript : MonoBehaviour {
 		List<GameObject> roomsToRemove = new List<GameObject>();
 		//add room flag
 		bool addRooms = true;
+
 		//get self (player)'s x position
 		float playerX = transform.position.x;
 		//calculate x position to remove out-of-view room prefabs
@@ -106,8 +124,78 @@ public class GeneratorScript : MonoBehaviour {
 
 		//if adding new room is required
 		//add new room with the x position of the rightmost room in scene
-		if (addRooms)
+		if (addRooms) {
 			AddRoom(furthestRoomEndX);
+		}
+	}
+
+	//add objects
+	//------------------------------------------------------------------------
+	void AddObject(float lastObjectX) {
+		//get an object to add to scene
+		//via a random key from array
+		int randomIndex = Random.Range(0, availableObjects.Length);
+		GameObject obj = (GameObject)Instantiate(availableObjects[randomIndex]);
+		//calculate a ranged x-position based on last object's x-position
+		float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
+		//calculate a ranged y-position
+		float randomY = Random.Range(objectsMinY, objectsMaxY);
+		//calculate random rotation within range
+		float rotation = Random.Range(objectsMinRotation, objectsMaxRotation);
+		//apply calculated position to new object
+		obj.transform.position = new Vector3(objectPositionX, randomY, 0);
+		//apply calculated rotation to new object
+		//Quaternion.Euler takes a vector 3 input: (0,0,45.0f)
+		//and returns a rotation for object transform
+		obj.transform.rotation = Quaternion.Euler(Vector3.forward * rotation);
+		//add object to objects list
+		objects.Add(obj);
+	}
+
+	//check if new object is required in the scene
+	//------------------------------------------------------------------------
+	void GenerateObjectsIfRequired() {
+		//create objs list for removal
+		List<GameObject> objectsToRemove = new List<GameObject>();
+
+		//get self's position x
+		float playerX = transform.position.x;
+		//calculate x position to remove out-of-view obj prefabs
+		float removeObjectsX = playerX - screenWidthInPoints;
+		//calculate x position to add a new obj prefab
+		float addObjectX = playerX + screenWidthInPoints;
+
+		//init farthestObjectX with 0
+		float farthestObjectX = 0;
+		
+		//loop through object prefabs
+		foreach (var obj in objects) {
+			//get largest x-position as last object's x-position
+			float objX = obj.transform.position.x;
+			farthestObjectX = Mathf.Max(farthestObjectX, objX);
+			
+			//add this obj to clean up list
+			//if this obj's x-pos smaller than remove limit
+			//this will clean up any out-of-view object from the scene list
+			if (objX < removeObjectsX) {
+				objectsToRemove.Add(obj);
+			}
+		}
+		
+		//loop through object in removal list
+		foreach (var obj in objectsToRemove) {
+			//remove this obj from removal list
+			objects.Remove(obj);
+			//and remove obj from scene
+			Destroy(obj);
+		}
+		
+		//if x-position of last object in scene (farthestObjectX)
+		//is smaller than the add add limit
+		//add a new object to scene based on farthestObjectX
+		if (farthestObjectX < addObjectX) {
+			AddObject(farthestObjectX);
+		}
 	}
 	#endregion
 }

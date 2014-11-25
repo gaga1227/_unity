@@ -20,6 +20,8 @@ public class MouseController : MonoBehaviour {
 	Animator animator;
 	//mouse death flag
 	private bool dead = false;
+	//coins count (unsigned integer: can only store positive integers)
+	private uint coins = 0;
 	#endregion
 
 	#region onStart
@@ -99,14 +101,29 @@ public class MouseController : MonoBehaviour {
 		//and set animator params
 		animator.SetBool("dead", true);
 	}
+
+	//hit by coin handler
+	//------------------------------------------------------------------------
+	void CollectCoin(Collider2D coinCollider) {
+		//adds to coins count
+		coins++;
+		//and destroy coin gameobject
+		Destroy(coinCollider.gameObject);
+	}
 	#endregion
 
 	#region Handlers
 	//collision handlers
 	//------------------------------------------------------------------------
 	void OnTriggerEnter2D(Collider2D collider) {
-		//trigger hit by laser
-		HitByLaser(collider);
+		//check collider target's tag
+		if ( collider.gameObject.CompareTag("Coins") ) {
+			//trigger hit by coin
+			CollectCoin(collider);
+		} else {
+			//trigger hit by laser
+			HitByLaser(collider);
+		}
 	}
 	#endregion
 }
