@@ -14,20 +14,35 @@ public class MouseController : MonoBehaviour {
 	//ground check layermask ref
 	//layermask works as a filter, returns any object tagged with a certain layer
 	public LayerMask groundCheckLayerMask;
+	//animator ref
+	private Animator animator;
 	//grounded flag
 	private bool grounded;
-	//animator ref
-	Animator animator;
 	//mouse death flag
 	private bool dead = false;
 	//coins count (unsigned integer: can only store positive integers)
 	private uint coins = 0;
+	//GUI coin texture ref
+	public Texture2D coinIconTexture;
+	//GUI label style ref
+	private GUIStyle labelStyle;
+	//Coin audio, played directly by static AudioSource method
+	public AudioClip coinCollectSound;
+	//SE audio source refs
+	public AudioSource jetpackAudio;
+	public AudioSource footstepsAudio;
 	#endregion
 
 	#region onStart
 	void Start () {
 		//cache animator comp
 		animator = GetComponent<Animator>();
+
+		//create new GUI styles
+		labelStyle = new GUIStyle();
+		labelStyle.fontSize = 30;
+		labelStyle.fontStyle = FontStyle.Bold;
+		labelStyle.normal.textColor = Color.yellow;
 	}
 	#endregion
 
@@ -67,6 +82,16 @@ public class MouseController : MonoBehaviour {
 	}
 	#endregion
 
+	#region onGUI
+	void OnGUI() {
+		//display coint count
+		DisplayCoinsCount();
+
+		//check and display restart button
+		DisplayRestartButton();
+	}
+	#endregion
+
 	#region Methods
 	//check grounded status
 	//------------------------------------------------------------------------
@@ -84,18 +109,24 @@ public class MouseController : MonoBehaviour {
 		animator.SetBool("grounded", grounded);
 	}
 
-	//updates jetpack particles
+	//updates jetpack particles and SE
 	//------------------------------------------------------------------------
 	void AdjustJetpack (bool jetpackActive) {
 		//switch on/off depends on grounded
 		jetpack.enableEmission = !grounded;
 		//adjust emission rate depends on user action
-		jetpack.emissionRate = jetpackActive ? 300.0f : 50.0f; 
+		jetpack.emissionRate = jetpackActive ? 300.0f : 50.0f;
+		//SE playback
+		AdjustFootstepsAndJetpackSound(jetpackActive);
 	}
 
 	//hit by laser handler
 	//------------------------------------------------------------------------
 	void HitByLaser(Collider2D laserCollider) {
+		//play SE if not dead already
+		if (!dead) {
+			laserCollider.gameObject.audio.Play();
+		}
 		//set death status
 		dead = true;
 		//and set animator params
@@ -105,10 +136,26 @@ public class MouseController : MonoBehaviour {
 	//hit by coin handler
 	//------------------------------------------------------------------------
 	void CollectCoin(Collider2D coinCollider) {
+		//play SE clip on stage point
+		//with a static method of the AudioSource class,
+		//no AudioSource attached to gameobject
+		AudioSource.PlayClipAtPoint(coinCollectSound, transform.position);
 		//adds to coins count
 		coins++;
 		//and destroy coin gameobject
 		Destroy(coinCollider.gameObject);
+	}
+
+	//footstep and jetpack SE playback
+	//------------------------------------------------------------------------
+	void AdjustFootstepsAndJetpackSound(bool jetpackActive) {
+		//adjust jetpack volume depends on active flag
+		jetpackAudio.volume = jetpackActive ? 1.0f : 0.5f;
+
+		//enable footstep SE when not dead and not flying
+		footstepsAudio.enabled = !dead && grounded;
+		//enable jetpack SE when not dead and flying
+		jetpackAudio.enabled = !dead && !grounded;
 	}
 	#endregion
 
@@ -123,6 +170,44 @@ public class MouseController : MonoBehaviour {
 		} else {
 			//trigger hit by laser
 			HitByLaser(collider);
+		}
+	}
+	#endregion
+
+	#region GUI Methods
+	//Display total coin count
+	//------------------------------------------------------------------------
+	void DisplayCoinsCount() {
+		//create new rectangle drawing area for icon
+		Rect coinIconRect = new Rect(10, 10, 32, 32);
+		//draw GUI coin icon texture into coinIconRect
+		GUI.DrawTexture(coinIconRect, coinIconTexture);
+
+		//create coin count label next to coin count coinIconRect
+		Rect labelRect = new Rect(coinIconRect.xMax, coinIconRect.y, 60, 32);
+		//draw coins count value into label with styles
+		GUI.Label(labelRect, coins.ToString(), labelStyle);
+	}
+
+	//Display restart button
+	//------------------------------------------------------------------------
+	void DisplayRestartButton() {
+		//when mouse is dead and fall to ground
+		if (dead && grounded) {
+			//create restart button drawing rectangle
+			//at stage center
+			Rect buttonRect = new Rect(
+				Screen.width * 0.33f, //x-pos
+				Screen.height * 0.45f,//y-pos
+				Screen.width * 0.33f, //w
+				Screen.height * 0.1f);//h
+
+			//Render GUI button with buttonRect and restartButtonStyle
+			//and attached click handler
+			if (GUI.Button(buttonRect, "Tap to restart!")) {
+				//reload current level(scene)
+				Application.LoadLevel (Application.loadedLevelName);
+			};
 		}
 	}
 	#endregion
