@@ -31,6 +31,8 @@ public class MouseController : MonoBehaviour {
 	//SE audio source refs
 	public AudioSource jetpackAudio;
 	public AudioSource footstepsAudio;
+	//parallax bg ref 
+	public ParallaxScroll parallax;
 	#endregion
 
 	#region onStart
@@ -79,6 +81,9 @@ public class MouseController : MonoBehaviour {
 
 		//updates jetpack particles
 		AdjustJetpack(jetpackActive);
+
+		//pass this position as offset to parallax bg
+		parallax.offset = transform.position.x;
 	}
 	#endregion
 
