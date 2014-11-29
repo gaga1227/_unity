@@ -230,6 +230,7 @@ GameObject:
   - 222: {fileID: 861434950}
   - 114: {fileID: 861434949}
   - 114: {fileID: 861434948}
+  - 95: {fileID: 861434951}
   m_Layer: 5
   m_Name: btn_start
   m_TagString: Untagged
@@ -336,6 +337,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 861434946}
+--- !u!95 &861434951
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 861434946}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4357dc24ac1534579bb072b3b6a1412c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1189888277
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,6 +591,7 @@ GameObject:
   - 222: {fileID: 1465887877}
   - 114: {fileID: 1465887876}
   - 114: {fileID: 1465887875}
+  - 95: {fileID: 1465887878}
   m_Layer: 5
   m_Name: btn_settings
   m_TagString: Untagged
@@ -639,7 +656,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1465887876}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1493249467}
+        m_MethodName: OpenSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1465887876
@@ -669,6 +698,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1465887873}
+--- !u!95 &1465887878
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465887873}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 894824dd1d0e741c995663bacc88dbdf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1493249465
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +752,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ee64589971f4a71a2ca3d778021987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 861434951}
+  settingsButton: {fileID: 1465887878}
 --- !u!1 &1877829396
 GameObject:
   m_ObjectHideFlags: 0
