@@ -8,11 +8,25 @@ public class UIManagerScript : MonoBehaviour {
 	public Animator startButton;
 	public Animator settingsButton;
 	public Animator dialog;
+	public Animator contentPanel;
 	#endregion
 
 	#region onStart
 	void Start () {
-
+		//move content panel down on start
+		//------------------------------------------------------------------------
+		//get contentPanel(animator)'s gameobject's transform
+		//and type cast it as RectTransform
+		RectTransform transform = contentPanel.gameObject.transform as RectTransform;
+		//get content panel's anchor pos as target pos
+		//so it is masked
+		Vector2 position = transform.anchoredPosition;
+		//update target pos with minus its height
+		//and assign it back to content panel
+		position.y -= transform.rect.height;
+		transform.anchoredPosition = position;
+		//set initial hidden flag to false to match the hidden state
+		contentPanel.SetBool("isHidden", true);
 	}
 	#endregion
 	
@@ -51,6 +65,18 @@ public class UIManagerScript : MonoBehaviour {
 
 		//trigger out anim for settings panel
 		dialog.SetBool("isHidden", true);
+	}
+
+	//toggle sliding menu
+	//------------------------------------------------------------------------
+	public void ToggleMenu() {
+		//enable animator
+		contentPanel.enabled = true;
+
+		//get current hidden flag value from animator
+		bool isHidden = contentPanel.GetBool("isHidden");
+		//set animator hidden flag value with toggled value
+		contentPanel.SetBool("isHidden", !isHidden);
 	}
 	#endregion
 
