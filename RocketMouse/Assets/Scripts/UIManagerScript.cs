@@ -9,6 +9,7 @@ public class UIManagerScript : MonoBehaviour {
 	public Animator settingsButton;
 	public Animator dialog;
 	public Animator contentPanel;
+	public Animator gearImage;
 	#endregion
 
 	#region onStart
@@ -70,13 +71,15 @@ public class UIManagerScript : MonoBehaviour {
 	//toggle sliding menu
 	//------------------------------------------------------------------------
 	public void ToggleMenu() {
-		//enable animator
+		//enable animators
 		contentPanel.enabled = true;
+		gearImage.enabled = true;
 
 		//get current hidden flag value from animator
 		bool isHidden = contentPanel.GetBool("isHidden");
-		//set animator hidden flag value with toggled value
+		//set animators hidden flag value with toggled value
 		contentPanel.SetBool("isHidden", !isHidden);
+		gearImage.SetBool("isHidden", !isHidden);
 	}
 	#endregion
 

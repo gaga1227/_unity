@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+//for using new GUI
+using UnityEngine.UI;
 
 public class MouseController : MonoBehaviour {
 	#region vars
@@ -25,7 +27,7 @@ public class MouseController : MonoBehaviour {
 	//GUI coin texture ref
 	public Texture2D coinIconTexture;
 	//GUI label style ref
-	private GUIStyle labelStyle;
+//	private GUIStyle labelStyle;
 	//Coin audio, played directly by static AudioSource method
 	public AudioClip coinCollectSound;
 	//SE audio source refs
@@ -33,6 +35,10 @@ public class MouseController : MonoBehaviour {
 	public AudioSource footstepsAudio;
 	//parallax bg ref 
 	public ParallaxScroll parallax;
+	//score text label ref
+	public Text coinsLabel;
+	//dialog UI ref
+	public GameObject restartDialog;
 	#endregion
 
 	#region onStart
@@ -40,11 +46,14 @@ public class MouseController : MonoBehaviour {
 		//cache animator comp
 		animator = GetComponent<Animator>();
 
-		//create new GUI styles
-		labelStyle = new GUIStyle();
-		labelStyle.fontSize = 30;
-		labelStyle.fontStyle = FontStyle.Bold;
-		labelStyle.normal.textColor = Color.yellow;
+		//hide the dialog menu initially
+		restartDialog.SetActive(false);
+
+//		//create new GUI styles
+//		labelStyle = new GUIStyle();
+//		labelStyle.fontSize = 30;
+//		labelStyle.fontStyle = FontStyle.Bold;
+//		labelStyle.normal.textColor = Color.yellow;
 	}
 	#endregion
 
@@ -88,13 +97,13 @@ public class MouseController : MonoBehaviour {
 	#endregion
 
 	#region onGUI
-	void OnGUI() {
-		//display coint count
-		DisplayCoinsCount();
-
-		//check and display restart button
-		DisplayRestartButton();
-	}
+//	void OnGUI() {
+//		//display coint count
+//		DisplayCoinsCount();
+//
+//		//check and display restart button
+//		DisplayRestartButton();
+//	}
 	#endregion
 
 	#region Methods
@@ -128,9 +137,12 @@ public class MouseController : MonoBehaviour {
 	//hit by laser handler
 	//------------------------------------------------------------------------
 	void HitByLaser(Collider2D laserCollider) {
-		//play SE if not dead already
+		//if not dead already
 		if (!dead) {
+			//play SE if not dead already
 			laserCollider.gameObject.audio.Play();
+			//show menu dialogue
+			restartDialog.SetActive(true);
 		}
 		//set death status
 		dead = true;
@@ -141,12 +153,14 @@ public class MouseController : MonoBehaviour {
 	//hit by coin handler
 	//------------------------------------------------------------------------
 	void CollectCoin(Collider2D coinCollider) {
-		//play SE clip on stage point
+		//play SE clip on stage point (position)
 		//with a static method of the AudioSource class,
 		//no AudioSource attached to gameobject
 		AudioSource.PlayClipAtPoint(coinCollectSound, transform.position);
 		//adds to coins count
 		coins++;
+		//update coins count label
+		coinsLabel.text = coins.ToString();
 		//and destroy coin gameobject
 		Destroy(coinCollider.gameObject);
 	}
@@ -180,40 +194,51 @@ public class MouseController : MonoBehaviour {
 	#endregion
 
 	#region GUI Methods
-	//Display total coin count
+	//UI handlers
 	//------------------------------------------------------------------------
-	void DisplayCoinsCount() {
-		//create new rectangle drawing area for icon
-		Rect coinIconRect = new Rect(10, 10, 32, 32);
-		//draw GUI coin icon texture into coinIconRect
-		GUI.DrawTexture(coinIconRect, coinIconTexture);
-
-		//create coin count label next to coin count coinIconRect
-		Rect labelRect = new Rect(coinIconRect.xMax, coinIconRect.y, 60, 32);
-		//draw coins count value into label with styles
-		GUI.Label(labelRect, coins.ToString(), labelStyle);
+	public void RestartGame() {
+		//reload current scene
+		Application.LoadLevel (Application.loadedLevelName);
+	}
+	public void ExitToMenu() {
+		//load menu scene
+		Application.LoadLevel ("MenuScene");
 	}
 
-	//Display restart button
-	//------------------------------------------------------------------------
-	void DisplayRestartButton() {
-		//when mouse is dead and fall to ground
-		if (dead && grounded) {
-			//create restart button drawing rectangle
-			//at stage center
-			Rect buttonRect = new Rect(
-				Screen.width * 0.33f, //x-pos
-				Screen.height * 0.45f,//y-pos
-				Screen.width * 0.33f, //w
-				Screen.height * 0.1f);//h
-
-			//Render GUI button with buttonRect and restartButtonStyle
-			//and attached click handler
-			if (GUI.Button(buttonRect, "Tap to restart!")) {
-				//reload current level(scene)
-				Application.LoadLevel (Application.loadedLevelName);
-			};
-		}
-	}
+//	//Display total coin count
+//	//------------------------------------------------------------------------
+//	void DisplayCoinsCount() {
+//		//create new rectangle drawing area for icon
+//		Rect coinIconRect = new Rect(10, 10, 32, 32);
+//		//draw GUI coin icon texture into coinIconRect
+//		GUI.DrawTexture(coinIconRect, coinIconTexture);
+//
+//		//create coin count label next to coin count coinIconRect
+//		Rect labelRect = new Rect(coinIconRect.xMax, coinIconRect.y, 60, 32);
+//		//draw coins count value into label with styles
+//		GUI.Label(labelRect, coins.ToString(), labelStyle);
+//	}
+//
+//	//Display restart button
+//	//------------------------------------------------------------------------
+//	void DisplayRestartButton() {
+//		//when mouse is dead and fall to ground
+//		if (dead && grounded) {
+//			//create restart button drawing rectangle
+//			//at stage center
+//			Rect buttonRect = new Rect(
+//				Screen.width * 0.33f, //x-pos
+//				Screen.height * 0.45f,//y-pos
+//				Screen.width * 0.33f, //w
+//				Screen.height * 0.1f);//h
+//
+//			//Render GUI button with buttonRect and restartButtonStyle
+//			//and attached click handler
+//			if (GUI.Button(buttonRect, "Tap to restart!")) {
+//				//reload current level(scene)
+//				Application.LoadLevel (Application.loadedLevelName);
+//			};
+//		}
+//	}
 	#endregion
 }
