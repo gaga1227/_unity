@@ -26,8 +26,6 @@ public class MouseController : MonoBehaviour {
 	private uint coins = 0;
 	//GUI coin texture ref
 	public Texture2D coinIconTexture;
-	//GUI label style ref
-//	private GUIStyle labelStyle;
 	//Coin audio, played directly by static AudioSource method
 	public AudioClip coinCollectSound;
 	//SE audio source refs
@@ -48,12 +46,6 @@ public class MouseController : MonoBehaviour {
 
 		//hide the dialog menu initially
 		restartDialog.SetActive(false);
-
-//		//create new GUI styles
-//		labelStyle = new GUIStyle();
-//		labelStyle.fontSize = 30;
-//		labelStyle.fontStyle = FontStyle.Bold;
-//		labelStyle.normal.textColor = Color.yellow;
 	}
 	#endregion
 
@@ -95,17 +87,7 @@ public class MouseController : MonoBehaviour {
 		parallax.offset = transform.position.x;
 	}
 	#endregion
-
-	#region onGUI
-//	void OnGUI() {
-//		//display coint count
-//		DisplayCoinsCount();
-//
-//		//check and display restart button
-//		DisplayRestartButton();
-//	}
-	#endregion
-
+	
 	#region Methods
 	//check grounded status
 	//------------------------------------------------------------------------
@@ -204,41 +186,5 @@ public class MouseController : MonoBehaviour {
 		//load menu scene
 		Application.LoadLevel ("MenuScene");
 	}
-
-//	//Display total coin count
-//	//------------------------------------------------------------------------
-//	void DisplayCoinsCount() {
-//		//create new rectangle drawing area for icon
-//		Rect coinIconRect = new Rect(10, 10, 32, 32);
-//		//draw GUI coin icon texture into coinIconRect
-//		GUI.DrawTexture(coinIconRect, coinIconTexture);
-//
-//		//create coin count label next to coin count coinIconRect
-//		Rect labelRect = new Rect(coinIconRect.xMax, coinIconRect.y, 60, 32);
-//		//draw coins count value into label with styles
-//		GUI.Label(labelRect, coins.ToString(), labelStyle);
-//	}
-//
-//	//Display restart button
-//	//------------------------------------------------------------------------
-//	void DisplayRestartButton() {
-//		//when mouse is dead and fall to ground
-//		if (dead && grounded) {
-//			//create restart button drawing rectangle
-//			//at stage center
-//			Rect buttonRect = new Rect(
-//				Screen.width * 0.33f, //x-pos
-//				Screen.height * 0.45f,//y-pos
-//				Screen.width * 0.33f, //w
-//				Screen.height * 0.1f);//h
-//
-//			//Render GUI button with buttonRect and restartButtonStyle
-//			//and attached click handler
-//			if (GUI.Button(buttonRect, "Tap to restart!")) {
-//				//reload current level(scene)
-//				Application.LoadLevel (Application.loadedLevelName);
-//			};
-//		}
-//	}
 	#endregion
 }

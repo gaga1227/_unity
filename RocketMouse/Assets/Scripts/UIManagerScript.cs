@@ -82,5 +82,4 @@ public class UIManagerScript : MonoBehaviour {
 		gearImage.SetBool("isHidden", !isHidden);
 	}
 	#endregion
-
 }
