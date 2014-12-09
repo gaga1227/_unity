@@ -81,5 +81,29 @@ public class UIManagerScript : MonoBehaviour {
 		contentPanel.SetBool("isHidden", !isHidden);
 		gearImage.SetBool("isHidden", !isHidden);
 	}
+
+	//toggle audio proxy fn to playerSettings
+	//------------------------------------------------------------------------
+	public void toggleAudio(bool state) {
+		GameObject pSettingsObj = GameObject.Find("PlayerSettings");
+		if (pSettingsObj) {
+			PlayerSettings pSettings = pSettingsObj.GetComponent<PlayerSettings>();
+			if (pSettings) {
+				pSettings.toggleAudio(state);
+			}
+		}
+	}
+	
+	//set volume proxy fn to playerSettings
+	//------------------------------------------------------------------------
+	public void setVolume(float vol) {
+		GameObject pSettingsObj = GameObject.Find("PlayerSettings");
+		if (pSettingsObj) {
+			PlayerSettings pSettings = pSettingsObj.GetComponent<PlayerSettings>();
+			if (pSettings) {
+				pSettings.setVolume(vol);
+			}
+		}
+	}
 	#endregion
 }

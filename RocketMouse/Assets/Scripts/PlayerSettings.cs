@@ -9,6 +9,7 @@ public class PlayerSettings : MonoBehaviour {
 	//public setting vars to share across the game
 	public bool audioEnabled;
 	public float volume;
+//	private float lastVolume;
 	#endregion
 
 	#region onStart
@@ -26,15 +27,52 @@ public class PlayerSettings : MonoBehaviour {
 	//toggle audio
 	//------------------------------------------------------------------------
 	public void toggleAudio(bool state) {
+		//exit on unchanged value
+		if (audioEnabled == !state) {
+			return;
+		}
+
 		//pass UI control value to settings var
 		audioEnabled = !state;
+
+		//sync volume UI control to toggle UI control
+		GameObject sldObj = GameObject.Find("sdr_volume");
+		if (sldObj) {
+			//store current volume as last before update
+//			lastVolume = volume;
+
+			//update slider
+			Slider volumeSlider = sldObj.GetComponent<Slider>();
+			if (audioEnabled) {
+				volumeSlider.value = 1.0f;
+			} else {
+				volumeSlider.value = 0.0f;
+			}
+		}
 	}
 
 	//set volume
 	//------------------------------------------------------------------------
 	public void setVolume(float vol) {
+		//exit on unchanged value
+		if (volume == vol) {
+			return;
+		}
+
 		//pass UI control value to settings var
 		volume = vol;
+
+		//sync toggle UI control to volume UI control
+		GameObject tglObj = GameObject.Find("tgl_sound");
+		if (tglObj) {
+			//update toggle
+			Toggle volumeToggle = tglObj.GetComponent<Toggle>();
+			if (volume == 0.0f) {
+				volumeToggle.isOn = true;
+			} else {
+				volumeToggle.isOn = false;
+			}
+		}
 	}
 	#endregion
 
@@ -42,28 +80,33 @@ public class PlayerSettings : MonoBehaviour {
 	//on level loaded
 	//------------------------------------------------------------------------
 	void OnLevelWasLoaded(int level) {
-		//if main camera exists
+		//refs
 		GameObject mainCam = GameObject.Find("Main Camera");
-		if (mainCam) {
-			//set volumn on main camera to stored volume value
-			mainCam.GetComponent<AudioSource>().volume = audioEnabled ? volume : 0.0f;
-		}
-		
-		//if slider object exists
 		GameObject sldObj = GameObject.Find("sdr_volume");
-		if (sldObj) {
-			//get slider UI and set its value to stored volume value
-			Slider volumeSlider = sldObj.GetComponent<Slider>();
-			volumeSlider.value = audioEnabled ? volume : 0.0f;
-		}
-		
-		//if toggle object exists
 		GameObject tglObj = GameObject.Find("tgl_sound");
+
+		//if main camera exists
+		//set volumn on main camera to stored volume value
+		if (mainCam) {
+			AudioSource music = mainCam.GetComponent<AudioSource>();
+			music.volume = audioEnabled ? volume : 0.0f;
+		}
+
+		//if slider object exists
+		//get slider UI and set its value to stored volume value
+		if (sldObj) {
+			Slider volumeSlider = sldObj.GetComponent<Slider>();
+			volumeSlider.value = volume;
+		}
+
+		//if toggle object exists
+		//get slider UI and set its value to stored volume value
 		if (tglObj) {
-			//get slider UI and set its value to stored volume value
 			Toggle volumeToggle = tglObj.GetComponent<Toggle>();
 			volumeToggle.isOn = !audioEnabled;
 		}
+
+		//Debug.Log ("level: " + level + ", vol: " + volume + ", audioEnabled: " + audioEnabled);
 	}
 	#endregion
 }
