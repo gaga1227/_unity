@@ -9,7 +9,9 @@ public class PlayerSettings : MonoBehaviour {
 	//public setting vars to share across the game
 	public bool audioEnabled;
 	public float volume;
-//	private float lastVolume;
+
+	//last volume value right before being disabled
+	public float lastVolume;
 	#endregion
 
 	#region onStart
@@ -35,17 +37,24 @@ public class PlayerSettings : MonoBehaviour {
 		//pass UI control value to settings var
 		audioEnabled = !state;
 
+		//if toggle to false
+		//store current volume as last volume
+		if (!audioEnabled) {
+			lastVolume = (volume == 0.0f) ? 1.0f : volume;
+		}
+
 		//sync volume UI control to toggle UI control
 		GameObject sldObj = GameObject.Find("sdr_volume");
 		if (sldObj) {
-			//store current volume as last before update
-//			lastVolume = volume;
-
 			//update slider
 			Slider volumeSlider = sldObj.GetComponent<Slider>();
-			if (audioEnabled) {
-				volumeSlider.value = 1.0f;
-			} else {
+			//if toggle to true and has valid last volume
+			if (audioEnabled && (lastVolume > 0.0f)) {
+				//set slider control to last volume
+				volumeSlider.value = lastVolume;
+			}
+			//otherwise set to 0
+			else {
 				volumeSlider.value = 0.0f;
 			}
 		}
