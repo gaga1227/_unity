@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveScript : MonoBehaviour {
+// Simply moves the current game object
 
+public class MoveScript : MonoBehaviour {
 	#region vars
 	// Object speed
 	public Vector2 speed = new Vector2(10, 10);
