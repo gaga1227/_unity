@@ -37,8 +37,7 @@ public class HealthScript : MonoBehaviour {
 
 	#region handlers
 	// collision trigger handler
-	void OnTriggerEnter2D(Collider2D otherCollider)
-	{
+	void OnTriggerEnter2D(Collider2D otherCollider) {
 		// get script comp ref from collider -> gameobject -> script comp
 		ShotScript shot = otherCollider.gameObject.GetComponent<ShotScript>();
 		// if is hit by a shot instance

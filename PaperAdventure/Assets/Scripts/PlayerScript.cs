@@ -50,4 +50,34 @@ public class PlayerScript : MonoBehaviour {
 		rigidbody2D.velocity = movement;
 	}
 	#endregion
+
+	#region handlers
+	// collision handler
+	void OnCollisionEnter2D(Collision2D collision) {
+		// init player damage flag to false
+		// won't hurt player unless collide with enemy
+		bool damagePlayer = false;
+
+		// find enemy script comp from collision gameobject
+		EnemyScript enemy = collision.gameObject.GetComponent<EnemyScript>();
+		// if found enemy script in collision gameobject
+		if (enemy != null) {
+			// find enemy's health script comp
+			HealthScript enemyHealth = enemy.GetComponent<HealthScript>();
+			// if found, call Damage method with enemy's full HP (kill it)
+			if (enemyHealth != null) enemyHealth.Damage(enemyHealth.hp);
+			// set player damage flag to true, makes this collision will hurt player
+			damagePlayer = true;
+		}
+		
+		// if player damage flag is true
+		// only when collide with enemy
+		if (damagePlayer) {
+			// find player's health script comp
+			HealthScript playerHealth = this.GetComponent<HealthScript>();
+			// if found, call Damage method with 1 HP point
+			if (playerHealth != null) playerHealth.Damage(1);
+		}
+	}
+	#endregion
 }
