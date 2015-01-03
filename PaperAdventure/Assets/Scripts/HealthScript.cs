@@ -30,7 +30,16 @@ public class HealthScript : MonoBehaviour {
 		hp -= damageCount;
 		//deatory object if HP is negative (Dead!)
 		if (hp <= 0) {
-			Destroy(gameObject);
+			if (isEnemy) {
+				// respawn if enemy
+				EnemyScript enemy = transform.gameObject.GetComponent<EnemyScript>();
+				if (enemy != null) {
+					enemy.Respawn();
+				}
+			} else {
+				// destroy if player
+				Destroy(gameObject);
+			}
 		}
 	}
 	#endregion
