@@ -6,9 +6,14 @@ using System.Collections;
 public class WeaponScript : MonoBehaviour {
 	#region vars
 	// shot prefab ref
+	public Vector3 shotOriginOffset = new Vector3(0, 0, 0);
+
+	// shot prefab ref
 	public Transform shotPrefab;
+
 	// interval in seconds between two shots
 	public float shootingRate = 0.25f;
+
 	// cooldown
 	private float shootCooldown;
 	// can attack flag
@@ -54,7 +59,7 @@ public class WeaponScript : MonoBehaviour {
 			
 			// pass self position to shot instance
 			// as starting position
-			shotTransform.position = transform.position;
+			shotTransform.position = transform.position + shotOriginOffset;
 
 			shotTransform.rotation = transform.rotation;
 			

@@ -9,6 +9,7 @@ public class ShotScript : MonoBehaviour {
 	public int damage = 1;
 	public float shotRotation = 6.0f;
 	public bool isEnemyShot = false;
+
 	// shot lifespan
 	private float lifespan = 5.0f;
 	#endregion

@@ -41,6 +41,9 @@ public class PlayerScript : MonoBehaviour {
 				weapon.Attack(false);
 			}
 		}
+
+		// keep player in camera bound
+		keepObjInBounds(transform, Camera.main);
 	}
 	#endregion
 
@@ -48,6 +51,31 @@ public class PlayerScript : MonoBehaviour {
 	void FixedUpdate() {
 		// Move the game object
 		rigidbody2D.velocity = movement;
+	}
+	#endregion
+
+	#region methods
+	// keep object within camera bounds
+	void keepObjInBounds(Transform transformObj, Camera cam) {
+		// get object's extents, which is half of the size
+		Vector3 objExts = transformObj.gameObject.renderer.bounds.extents;
+
+		// calculate z distance from obj and cam
+		var distZ = (transformObj.position - cam.transform.position).z;
+
+		// convert viewport edges to world points for obj's application
+		// calculation is happening on obj's depth-plane with distZ
+		// but seems unnecessary, can just be 0.0f
+		var leftBorder = cam.ViewportToWorldPoint(new Vector3(0,0,distZ)).x;
+		var rightBorder = cam.ViewportToWorldPoint(new Vector3(1,0,distZ)).x;
+		var topBorder = cam.ViewportToWorldPoint(new Vector3(0,0,distZ)).y;
+		var bottomBorder = cam.ViewportToWorldPoint(new Vector3(0,1,distZ)).y;
+
+		// apply obj's within-bounds positon
+		transformObj.position = new Vector3(
+			Mathf.Clamp(transformObj.position.x, leftBorder + objExts.x, rightBorder - objExts.x),
+			Mathf.Clamp(transformObj.position.y, topBorder + objExts.y, bottomBorder - objExts.y),
+			transformObj.position.z);
 	}
 	#endregion
 
