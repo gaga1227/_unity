@@ -14,6 +14,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400010}
   m_Layer: 0
   m_Name: Poulpi
   m_TagString: Untagged
@@ -60,7 +61,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.17999983, y: 2.17000008, z: 0}
+  m_LocalPosition: {x: 14.8400002, y: 3.48000002, z: 0}
   m_LocalScale: {x: .400000006, y: .400000006, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -114,7 +115,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Size: {x: 3.00760078, y: 3.74552226}
   m_Center: {x: .233678818, y: -.159884691}
 --- !u!114 &11400000
@@ -141,8 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e92a6705f050430f9dcdd3c23d19cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1
   isEnemy: 1
+  hp: 1
+  isInvincible: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -182,6 +184,18 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: -1, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 1.5
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4730d5cc1494cd3988e84b2513fdf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasSpawn: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
