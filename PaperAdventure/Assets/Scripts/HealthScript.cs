@@ -14,7 +14,7 @@ public class HealthScript : MonoBehaviour {
 	// invincible vars
 	// damaged but not killed will trigger invincible time
 	public bool isInvincible;
-	private float invincibleTime = 5.0f;
+	private float invincibleTime = 3.0f;
 	private float invincibleCooldown;
 	#endregion
 	

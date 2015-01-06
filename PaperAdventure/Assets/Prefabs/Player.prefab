@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
+  - 95: {fileID: 9500000}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -60,6 +61,21 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: 8.45168018, y: 6.46098137}
   m_Center: {x: 1.08382702, y: -.398139656}
+--- !u!95 &9500000
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b1dbb632d28c44459a5b220c8f363756, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ac42eb5f6794c989842c5f9435a4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 50, y: 50}
+  speed: {x: 30, y: 30}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

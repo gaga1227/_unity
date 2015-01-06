@@ -9,8 +9,20 @@ public class PlayerScript : MonoBehaviour {
 	public Vector2 speed = new Vector2(50, 50);
 	// player movement
 	private Vector2 movement;
+	// health script ref
+	private HealthScript health;
+	// animator comp ref
+	private Animator animator;
 	#endregion
-	
+
+	#region onStart
+	void Start() {
+		// assign comp refs
+		health = transform.GetComponent<HealthScript>();
+		animator = transform.GetComponent<Animator>();
+	}
+	#endregion
+
 	#region onUpdate
 	void Update() {
 		// Moving
@@ -44,6 +56,9 @@ public class PlayerScript : MonoBehaviour {
 
 		// keep player in camera bound
 		keepObjInBounds(transform, Camera.main);
+
+		// animations
+		updateAnimation();
 	}
 	#endregion
 
@@ -77,38 +92,23 @@ public class PlayerScript : MonoBehaviour {
 			Mathf.Clamp(transformObj.position.y, topBorder + objExts.y, bottomBorder - objExts.y),
 			transformObj.position.z);
 	}
+
+	// update animation based on states
+	void updateAnimation() {
+		if (health != null) {
+			if (health.isInvincible) {
+				animator.Play("respawn");
+			} else {
+				animator.Play("default");
+			}
+		}
+	}
 	#endregion
 
 	#region handlers
-	// collision handler
-	// cannot use collision, rigibody2D will pick up
-	// collision velocity to disrupt respawn movement
-
-//	void OnCollisionEnter2D(Collision2D collision) {
-//		// init player damage flag to false
-//		// won't hurt player unless collide with enemy
-//		bool damagePlayer = false;
-//
-//		// find enemy script comp from collision gameobject
-//		EnemyScript enemy = collision.gameObject.GetComponent<EnemyScript>();
-//		// if found enemy script in collision gameobject
-//		if (enemy != null) {
-//			// find enemy's health script comp
-//			HealthScript enemyHealth = enemy.GetComponent<HealthScript>();
-//			// if found, call Damage method with enemy's full HP (kill it)
-//			if (enemyHealth != null) enemyHealth.Damage(enemyHealth.hp);
-//			// set player damage flag to true, makes this collision will hurt player
-//			damagePlayer = true;
-//		}
-//		
-//		// if player damage flag is true
-//		// only when collide with enemy
-//		if (damagePlayer) {
-//			// find player's health script comp
-//			HealthScript playerHealth = this.GetComponent<HealthScript>();
-//			// if found, call Damage method with 1 HP point
-//			if (playerHealth != null) playerHealth.Damage(1);
-//		}
-//	}
+	// Cannot use collision handler for collision event
+	// Rigibody2D will pick up collision velocity
+	// and cause disruption on respawn movement
+	// now use OnTriggerEnter2D instead in HealthScript
 	#endregion
 }
