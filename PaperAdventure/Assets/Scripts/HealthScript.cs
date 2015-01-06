@@ -50,13 +50,20 @@ public class HealthScript : MonoBehaviour {
 		hp -= damageCount;
 		//destroy object if HP is negative (Dead!)
 		if (hp <= 0) {
+			// if enemy
 			if (isEnemy) {
-				// respawn if enemy
+				// add explosion effects at enemy's position
+				SpecialEffectsHelper.Instance.Explosion(transform.position);
+				// respawn
 				SpawnScript spawn = transform.gameObject.GetComponent<SpawnScript>();
 				if (spawn != null) {
 					spawn.Respawn();
 				}
-			} else {
+			}
+			// else player
+			else {
+				// add explosion effects at player's position
+				SpecialEffectsHelper.Instance.Explosion(transform.position);
 				// destroy if player
 				Destroy(gameObject);
 			}
