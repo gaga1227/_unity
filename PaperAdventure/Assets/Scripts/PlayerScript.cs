@@ -13,6 +13,11 @@ public class PlayerScript : MonoBehaviour {
 	private HealthScript health;
 	// animator comp ref
 	private Animator animator;
+	// touch input sensitivity
+	private float touchSensitivityX;
+	private float touchSensitivityY;
+	// finger size
+	private float fingerSize = 0.2f;
 	#endregion
 
 	#region onStart
@@ -20,22 +25,22 @@ public class PlayerScript : MonoBehaviour {
 		// assign comp refs
 		health = transform.GetComponent<HealthScript>();
 		animator = transform.GetComponent<Animator>();
+
+		// calculate touch sensitivity
+		touchSensitivityY = 0.05f;
+		touchSensitivityX = 0.05f * Camera.main.aspect;
 	}
 	#endregion
 
 	#region onUpdate
 	void Update() {
-		// Moving
-		// Retrieve input axis information
+		// Retrieve traditional input information
+
+		// for Moving
 		float inputX = Input.GetAxis("Horizontal");
 		float inputY = Input.GetAxis("Vertical");
-		
-		// Movement per direction
-		movement = new Vector2(
-			speed.x * inputX,
-			speed.y * inputY);
 
-		// Shooting
+		// for Shooting
 		// Retrieve input button information on either 'Ctrl', or 'Cmd' keys
 		// '|=' equals 'shoot = shoot | Input.GetButtonDown("Fire3");'
 		// 'GetButton' only fires on down state, not down action
@@ -43,7 +48,36 @@ public class PlayerScript : MonoBehaviour {
 		bool shoot = Input.GetButton("Fire1");
 		shoot |= Input.GetButtonDown("Fire3");
 
-		// if fire button(Ctrl or Alt) is down
+		// Update input info if has touch input
+		if (UtilsHelper.Instance.isTouchInput) {
+			if (Input.touchCount > 0) {
+				Touch touch = Input.GetTouch(0);
+				if (touch.phase == TouchPhase.Began) {
+					shoot = true;
+				}
+				else if (touch.phase == TouchPhase.Moved && touch.phase != TouchPhase.Canceled) {
+					float touchSpeedX = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.x) * touchSensitivityX);
+					float touchSpeedY = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.y) * touchSensitivityY);
+					inputX = (touch.deltaPosition.x > 0 ? 1 : -1) * touchSpeedX;
+					inputY = (touch.deltaPosition.y > 0 ? 1 : -1) * touchSpeedY;
+				}
+				else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
+					inputX = 0;
+					inputY = 0;
+					shoot = false;
+				}
+			}
+		}
+
+		// Apply input information
+
+		// Movement per direction
+		movement = new Vector2(
+			speed.x * inputX,
+			speed.y * inputY);
+
+		// Shooting
+		// if is firing
 		if (shoot) {
 			// find weapon script comp
 			// and call Attack public method
@@ -88,8 +122,16 @@ public class PlayerScript : MonoBehaviour {
 
 		// apply obj's within-bounds positon
 		transformObj.position = new Vector3(
-			Mathf.Clamp(transformObj.position.x, leftBorder + objExts.x, rightBorder - objExts.x),
-			Mathf.Clamp(transformObj.position.y, topBorder + objExts.y, bottomBorder - objExts.y),
+			Mathf.Clamp(
+				transformObj.position.x,
+				leftBorder + objExts.x + fingerSize,
+				rightBorder - objExts.x - fingerSize
+			),
+			Mathf.Clamp(
+				transformObj.position.y,
+				topBorder + objExts.y,
+				bottomBorder - objExts.y
+			),
 			transformObj.position.z);
 	}
 
