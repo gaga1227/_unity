@@ -57,11 +57,17 @@ public class WeaponScript : MonoBehaviour {
 			// 'var' can only be used at method scope
 			var shotTransform = Instantiate(shotPrefab) as Transform;
 			
-			// pass self position to shot instance
-			// as starting position
+			// pass self position and rotation to shot instance
+			// as starting position and rotation
 			shotTransform.position = transform.position + shotOriginOffset;
-
 			shotTransform.rotation = transform.rotation;
+
+			// play SE
+			if (isEnemy) {
+				SoundEffectsHelper.Instance.MakeEnemyShotSound();
+			} else {
+				SoundEffectsHelper.Instance.MakePlayerShotSound();
+			}
 			
 			// get shot instance's shot script comp
 			// and pass isEnemy value to it
