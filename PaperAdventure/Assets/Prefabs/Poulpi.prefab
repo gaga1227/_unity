@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasSpawn: 0
+  spawnOffset: {x: 0, y: .5}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

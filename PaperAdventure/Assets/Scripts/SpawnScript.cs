@@ -7,6 +7,8 @@ public class SpawnScript : MonoBehaviour {
 	#region vars
 	// if instance is spawn
 	public bool hasSpawn;
+	// respawn offset
+	public Vector2 spawnOffset;
 	// ref for move script comp
 	private MoveScript moveScript;
 	// ref for health script comp
@@ -89,9 +91,9 @@ public class SpawnScript : MonoBehaviour {
 		// calculate new position
 		Vector3 newPos = new Vector3(
 			// base pos + random x-pos + instance size shift
-			mainCam.transform.position.x + camExtW * Random.Range(1.0f, 3.0f) + objExts.x,
+			mainCam.transform.position.x + camExtW * Random.Range(1.0f, 3.0f) + objExts.x + spawnOffset.x,
 			// from negative (half view - half instance), to positive
-			(camExtH - objExts.y) * Random.Range(-1.0f, 1.0f),
+			(camExtH - objExts.y - spawnOffset.y) * Random.Range(-1.0f, 1.0f),
 			transform.position.z);
 		
 		// apply new pos to instance
