@@ -64,8 +64,11 @@ public class HealthScript : MonoBehaviour {
 			}
 			// else player
 			else {
+				// Load menu scene
+				// need to execute this line before gameobject is destroyed
+				Application.LoadLevel("Menu");
 				// destroy if player
-				Destroy(gameObject);
+				Destroy(gameObject, 3);
 			}
 		}
 		//damaged but alive, HP > 0

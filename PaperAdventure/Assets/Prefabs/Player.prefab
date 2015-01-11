@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 0
-  hp: 100
+  hp: 3
   isInvincible: 0
 --- !u!114 &11400006
 MonoBehaviour:
