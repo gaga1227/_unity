@@ -12,6 +12,20 @@ public class ShotScript : MonoBehaviour {
 
 	// shot lifespan
 	private float lifespan = 5.0f;
+
+	// MenuControl
+	private GameObject MenuControl;
+	private MenuScript MenuControlScript;
+	#endregion
+
+	#region onAwake
+	void Awake () {
+		// assign menuControl ref
+		MenuControl = GameObject.Find("MenuControl");
+		if (MenuControl != null) {
+			MenuControlScript = MenuControl.GetComponent<MenuScript>();
+		}
+	}
 	#endregion
 
 	#region onStart
@@ -24,7 +38,9 @@ public class ShotScript : MonoBehaviour {
 	#region onUpdate
 	void Update () {
 		// rotate shot if is enemy shot
-		if (isEnemyShot) RotateShot();
+		if (isEnemyShot && MenuControlScript != null && !MenuControlScript.isPaused) {
+			RotateShot();
+		}
 	}
 	#endregion
 
