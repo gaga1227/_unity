@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 // Title screen script
@@ -8,16 +9,34 @@ public class MenuScript : MonoBehaviour {
 	// main bg music ref
 	public GameObject musicObj;
 	private AudioSource music;
+	// btn pause refs
+	public GameObject btnPauseImage;
+	public Sprite playSprite;
+	public Sprite pauseSprite;
+	private Image btnPauseImageComp;
 	// paused flag
 	public bool isPaused;
 	#endregion
 
 	#region	onAwake
 	void Awake() {
-		// init scene with play
+		// find music audiosource ref
+		if (musicObj != null) {
+			music = musicObj.GetComponent<AudioSource>();
+		}
+		// find btn pause image comp
+		if (btnPauseImage != null) {
+			btnPauseImageComp = btnPauseImage.GetComponent<Image>();
+		}
+	}
+	#endregion
+
+	#region onStart
+	void Start() {
+		// init scene with isPaused = false
 		isPaused = false;
-		// assign music ref
-		music = musicObj.GetComponent<AudioSource>();
+		// init btn pause images
+		toggleBtnPauseSprite(isPaused);
 	}
 	#endregion
 
@@ -29,16 +48,31 @@ public class MenuScript : MonoBehaviour {
 
 	// pause/resume method
 	public void PauseResume() {
-		// toggle gameplay and music
-		if (isPaused) {
-			Time.timeScale = 1;
-			if (music != null) music.Play();
-		} else {
-			Time.timeScale = 0;
-			if (music != null) music.Pause();
-		}
 		// toggle pause flag
 		isPaused = !isPaused;
+
+		// toggle gameplay and music
+		if (!isPaused) {
+			// time
+			Time.timeScale = 1;
+			// bg music
+			if (music != null) music.Play();
+		} else {
+			// time
+			Time.timeScale = 0;
+			// bg music
+			if (music != null) music.Pause();
+		}
+
+		// toggle btn pause images
+		toggleBtnPauseSprite(isPaused);
+	}
+
+	// update btn pause images
+	private void toggleBtnPauseSprite(bool paused) {
+		if (btnPauseImageComp != null) {
+			btnPauseImageComp.sprite = paused ? playSprite : pauseSprite;
+		}
 	}
 	#endregion
 }

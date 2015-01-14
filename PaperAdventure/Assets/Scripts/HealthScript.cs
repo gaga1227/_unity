@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 // Handle hitpoints and damages
 
@@ -10,6 +12,11 @@ public class HealthScript : MonoBehaviour {
 
 	// health points
 	public int hp = 1;
+
+	// list of hearts
+	private List<Transform> hearts;
+	public Transform canvas;
+	public Transform heartPrefab;
 
 	// invincible vars
 	// damaged but not killed will trigger invincible time
@@ -23,6 +30,11 @@ public class HealthScript : MonoBehaviour {
 		// init isInvincible flag as false
 		isInvincible = false;
 		invincibleCooldown = 0.0f;
+
+		// updateHearts if is player
+		if (!isEnemy) {
+			updateHearts(hp);
+		}
 	}
 	#endregion
 	
@@ -77,6 +89,38 @@ public class HealthScript : MonoBehaviour {
 			isInvincible = true;
 			// reset invincible cooldown to invincible time
 			invincibleCooldown = invincibleTime;
+		}
+	}
+
+	// update UI hearts
+	private void updateHearts(int count) {
+		// init hearts tracking list if not created already
+		if (hearts == null) {
+			hearts = new List<Transform>();
+		}
+
+		// validate count update
+		if (count == hearts.Count) return;
+
+		// position vars
+		float startX = 20.0f;
+		float posY = -20.0f;
+		float width = 60.0f;
+		float gapX = 5.0f;
+		
+		// loop through hp count and init heart instances
+		for (int i = 0; i < count; i++) {
+			// temp ref for heart instance
+			var heart = Instantiate(heartPrefab) as Transform;
+			// add heart as child of canvas
+			heart.SetParent(canvas, false);
+			// get RectTransform comp ref from heart
+			RectTransform rectT = heart.GetComponent<RectTransform>();
+			// position heart
+			float posX = (width + gapX) * i + startX;
+			rectT.anchoredPosition = new Vector2(posX, posY);
+			// add heart to list
+			hearts.Add(heart);
 		}
 	}
 	#endregion
