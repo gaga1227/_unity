@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 // Handle hitpoints and damages
 
@@ -31,7 +32,7 @@ public class HealthScript : MonoBehaviour {
 		isInvincible = false;
 		invincibleCooldown = 0.0f;
 
-		// updateHearts if is player
+		// update hearts UI if is player
 		if (!isEnemy) {
 			updateHearts(hp);
 		}
@@ -58,9 +59,15 @@ public class HealthScript : MonoBehaviour {
 		// no damage when player is invincible
 		if (isInvincible) return;
 
-		//reduce HP by damage count
+		// reduce HP by damage count
 		hp -= damageCount;
-		//destroy object if HP is negative (Dead!)
+
+		// update hearts UI if is player
+		if (!isEnemy) {
+			updateHearts(hp);
+		}
+
+		// destroy object if HP is negative (Dead!)
 		if (hp <= 0) {
 			// add explosion effects and SE at obj's position
 			SpecialEffectsHelper.Instance.Explosion(transform.position);
@@ -78,13 +85,13 @@ public class HealthScript : MonoBehaviour {
 			else {
 				// Load menu scene
 				// need to execute this line before gameobject is destroyed
-				Application.LoadLevel("Menu");
-				// destroy if player
-				Destroy(gameObject, 3);
+				Invoke("LoadMenu", 2f);
+				// destroy if player, after Invoke LoadMenu
+				Destroy(gameObject, 3f);
 			}
 		}
 		//damaged but alive, HP > 0
-		else {
+		else if (hp >= 0) {
 			// set player invincible
 			isInvincible = true;
 			// reset invincible cooldown to invincible time
@@ -93,35 +100,63 @@ public class HealthScript : MonoBehaviour {
 	}
 
 	// update UI hearts
-	private void updateHearts(int count) {
+	private void updateHearts(int newHp) {
 		// init hearts tracking list if not created already
 		if (hearts == null) {
 			hearts = new List<Transform>();
 		}
 
-		// validate count update
-		if (count == hearts.Count) return;
+		// validate supplied count value
+		if (newHp == hearts.Count) return;
 
 		// position vars
 		float startX = 20.0f;
 		float posY = -20.0f;
 		float width = 60.0f;
 		float gapX = 5.0f;
-		
-		// loop through hp count and init heart instances
-		for (int i = 0; i < count; i++) {
-			// temp ref for heart instance
-			var heart = Instantiate(heartPrefab) as Transform;
-			// add heart as child of canvas
-			heart.SetParent(canvas, false);
-			// get RectTransform comp ref from heart
-			RectTransform rectT = heart.GetComponent<RectTransform>();
-			// position heart
-			float posX = (width + gapX) * i + startX;
-			rectT.anchoredPosition = new Vector2(posX, posY);
-			// add heart to list
-			hearts.Add(heart);
+
+		// get update difference
+		int countDiff = newHp - hearts.Count;
+
+		// HP increasing
+		// add heart
+		if (countDiff > 0) {
+			// loop through countDiff and update heart instances and list
+			for (int i = 0; i < Mathf.Abs(countDiff); i++) {
+				// temp ref for heart instance
+				var heart = Instantiate(heartPrefab) as Transform;
+				// add heart as child of canvas
+				heart.SetParent(canvas, false);
+				// get RectTransform comp ref from heart
+				RectTransform rectT = heart.GetComponent<RectTransform>();
+				// position heart after the last one in list
+				float posX = (width + gapX) * (hearts.Count + 0) + startX;
+				rectT.anchoredPosition = new Vector2(posX, posY);
+				// add heart to list
+				hearts.Add(heart);
+			}
 		}
+		// HP decreasing
+		// remove heart
+		else {
+			// loop through countDiff and update heart instances and list
+			for (int i = 0; i < Mathf.Abs(countDiff); i++) {
+				// temp ref for the last heart instance in list
+				Transform heart = hearts.LastOrDefault();
+				// if heart exists
+				if (heart != null) {
+					// remove last heart from list
+					hearts.Remove(heart);
+					// remove last heart from scene
+					Destroy(heart.gameObject);
+				}
+			}
+		}
+	}
+
+	// load Menu scene
+	private void LoadMenu() {
+		Application.LoadLevel("Menu");
 	}
 	#endregion
 

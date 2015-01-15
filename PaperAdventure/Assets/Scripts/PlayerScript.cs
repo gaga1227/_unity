@@ -36,66 +36,77 @@ public class PlayerScript : MonoBehaviour {
 	
 	#region onUpdate
 	void Update() {
-		// Retrieve traditional input information
-		
-		// for Moving
-		float inputX = Input.GetAxis("Horizontal");
-		float inputY = Input.GetAxis("Vertical");
-		
-		// for Shooting
-		// Retrieve input button information on either 'Ctrl', or 'Cmd' keys
-		// '|=' equals 'shoot = shoot | Input.GetButtonDown("Fire3");'
-		// 'GetButton' only fires on down state, not down action
-		// 'GetButtonDown' only fires on down action, not down state
-		bool shoot = Input.GetButton("Fire1");
-		shoot |= Input.GetButtonDown("Fire3");
-		
-		// Update input info if has touch input
-		if (UtilsHelper.Instance.isTouchInput) {
-			if (Input.touchCount > 0) {
-				Touch touch = Input.GetTouch(0);
-				if (touch.phase == TouchPhase.Began) {
-					shoot = true;
+		if (health != null) {
+			// if player is alive
+			if (health.hp > 0) {
+				// Retrieve traditional input information
+				
+				// for Moving
+				float inputX = Input.GetAxis("Horizontal");
+				float inputY = Input.GetAxis("Vertical");
+				
+				// for Shooting
+				// Retrieve input button information on either 'Ctrl', or 'Cmd' keys
+				// '|=' equals 'shoot = shoot | Input.GetButtonDown("Fire3");'
+				// 'GetButton' only fires on down state, not down action
+				// 'GetButtonDown' only fires on down action, not down state
+				bool shoot = Input.GetButton("Fire1");
+				shoot |= Input.GetButtonDown("Fire3");
+				
+				// Update input info if has touch input
+				if (UtilsHelper.Instance.isTouchInput) {
+					if (Input.touchCount > 0) {
+						Touch touch = Input.GetTouch(0);
+						if (touch.phase == TouchPhase.Began) {
+							shoot = true;
+						}
+						else if (touch.phase == TouchPhase.Moved && touch.phase != TouchPhase.Canceled) {
+							float touchSpeedX = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.x) * touchSensitivityX);
+							float touchSpeedY = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.y) * touchSensitivityY);
+							inputX = (touch.deltaPosition.x > 0 ? 1 : -1) * touchSpeedX;
+							inputY = (touch.deltaPosition.y > 0 ? 1 : -1) * touchSpeedY;
+						}
+						else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
+							inputX = 0;
+							inputY = 0;
+							shoot = false;
+						}
+					}
 				}
-				else if (touch.phase == TouchPhase.Moved && touch.phase != TouchPhase.Canceled) {
-					float touchSpeedX = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.x) * touchSensitivityX);
-					float touchSpeedY = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.y) * touchSensitivityY);
-					inputX = (touch.deltaPosition.x > 0 ? 1 : -1) * touchSpeedX;
-					inputY = (touch.deltaPosition.y > 0 ? 1 : -1) * touchSpeedY;
+				
+				// Apply input information
+				
+				// Movement per direction
+				movement = new Vector2(
+					speed.x * Mathf.Lerp(movement.x/speed.x, inputX, Time.deltaTime * smooth),
+					speed.y * Mathf.Lerp(movement.y/speed.y, inputY, Time.deltaTime * smooth)
+					);
+				
+				// Shooting
+				// if is firing
+				if (shoot) {
+					// find weapon script comp
+					// and call Attack public method
+					// with isEnemy flag (false for Player)
+					WeaponScript weapon = GetComponent<WeaponScript>();
+					if (weapon != null) {
+						weapon.Attack(false);
+					}
 				}
-				else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
-					inputX = 0;
-					inputY = 0;
-					shoot = false;
-				}
+				
+				// keep player in camera bound
+				keepObjInBounds(transform, Camera.main);
 			}
-		}
-		
-		// Apply input information
-		
-		// Movement per direction
-		movement = new Vector2(
-			speed.x * Mathf.Lerp(movement.x/speed.x, inputX, Time.deltaTime * smooth),
-			speed.y * Mathf.Lerp(movement.y/speed.y, inputY, Time.deltaTime * smooth)
-			);
-		
-		// Shooting
-		// if is firing
-		if (shoot) {
-			// find weapon script comp
-			// and call Attack public method
-			// with isEnemy flag (false for Player)
-			WeaponScript weapon = GetComponent<WeaponScript>();
-			if (weapon != null) {
-				weapon.Attack(false);
+			// if player is dead
+			else {
+				// make it fall
+				movement = new Vector2(0, -10f);
+				transform.Rotate(0, 0, 6f);
 			}
+
+			// update player animations
+			updateAnimation();
 		}
-		
-		// keep player in camera bound
-		keepObjInBounds(transform, Camera.main);
-		
-		// animations
-		updateAnimation();
 	}
 	#endregion
 	
@@ -140,12 +151,10 @@ public class PlayerScript : MonoBehaviour {
 	
 	// update animation based on states
 	void updateAnimation() {
-		if (health != null) {
-			if (health.isInvincible) {
-				animator.Play("respawn");
-			} else {
-				animator.Play("default");
-			}
+		if (health.isInvincible) {
+			animator.Play("respawn");
+		} else {
+			animator.Play("default");
 		}
 	}
 	#endregion

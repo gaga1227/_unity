@@ -114,6 +114,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicObj: {fileID: 0}
+  btnPauseImage: {fileID: 0}
+  playSprite: {fileID: 0}
+  pauseSprite: {fileID: 0}
   isPaused: 0
 --- !u!1 &284519855
 GameObject:
