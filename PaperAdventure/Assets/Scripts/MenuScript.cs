@@ -16,6 +16,10 @@ public class MenuScript : MonoBehaviour {
 	private Image btnPauseImageComp;
 	// paused flag
 	public bool isPaused;
+	// score UI ref
+	public int Score;
+	public GameObject scoreTextObj;
+	private Text scoreText;
 	#endregion
 
 	#region	onAwake
@@ -27,6 +31,11 @@ public class MenuScript : MonoBehaviour {
 		// find btn pause image comp
 		if (btnPauseImage != null) {
 			btnPauseImageComp = btnPauseImage.GetComponent<Image>();
+		}
+		// prep score and UI if is enemy
+		if (scoreTextObj != null) {
+			scoreText = scoreTextObj.GetComponent<Text>();
+			Score = 0;
 		}
 	}
 	#endregion
@@ -73,6 +82,12 @@ public class MenuScript : MonoBehaviour {
 		if (btnPauseImageComp != null) {
 			btnPauseImageComp.sprite = paused ? playSprite : pauseSprite;
 		}
+	}
+
+	// update score
+	public void updateScore(int amount) {
+		Score += amount;
+		scoreText.text = Score.ToString();
 	}
 	#endregion
 }

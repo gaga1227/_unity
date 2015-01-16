@@ -14,18 +14,32 @@ public class HealthScript : MonoBehaviour {
 	// health points
 	public int hp = 1;
 
-	// list of hearts
-	private List<Transform> hearts;
-	public Transform canvas;
-	public Transform heartPrefab;
-
 	// invincible vars
 	// damaged but not killed will trigger invincible time
 	public bool isInvincible;
 	private float invincibleTime = 3.0f;
 	private float invincibleCooldown;
+
+	// list of hearts
+	private List<Transform> hearts;
+	public Transform canvas;
+	public Transform heartPrefab;
+
+	// MenuControl
+	private GameObject MenuControl;
+	private MenuScript MenuControlScript;
 	#endregion
-	
+
+	#region onAwake
+	void Awake () {
+		// assign menuControl ref
+		MenuControl = GameObject.Find("MenuControl");
+		if (MenuControl != null) {
+			MenuControlScript = MenuControl.GetComponent<MenuScript>();
+		}
+	}
+	#endregion
+
 	#region onStart
 	void Start () {
 		// init isInvincible flag as false
@@ -75,6 +89,10 @@ public class HealthScript : MonoBehaviour {
 
 			// if enemy
 			if (isEnemy) {
+				// update UI score
+				if (MenuControlScript != null) {
+					MenuControlScript.updateScore(damageCount);
+				}
 				// respawn
 				SpawnScript spawn = transform.gameObject.GetComponent<SpawnScript>();
 				if (spawn != null) {
