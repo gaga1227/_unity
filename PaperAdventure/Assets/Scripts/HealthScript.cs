@@ -110,10 +110,12 @@ public class HealthScript : MonoBehaviour {
 		}
 		//damaged but alive, HP > 0
 		else if (hp >= 0) {
-			// set player invincible
-			isInvincible = true;
-			// reset invincible cooldown to invincible time
-			invincibleCooldown = invincibleTime;
+			if (!isEnemy) {
+				// set player invincible
+				isInvincible = true;
+				// reset invincible cooldown to invincible time
+				invincibleCooldown = invincibleTime;
+			}
 		}
 	}
 
