@@ -14,6 +14,9 @@ public class WeaponScript : MonoBehaviour {
 	// interval in seconds between two shots
 	public float shootingRate = 0.25f;
 
+	// mute flag
+	public bool mute = false;
+
 	// cooldown
 	private float shootCooldown;
 	// can attack flag
@@ -63,10 +66,12 @@ public class WeaponScript : MonoBehaviour {
 			shotTransform.rotation = transform.rotation;
 
 			// play SE
-			if (isEnemy) {
-				SoundEffectsHelper.Instance.MakeEnemyShotSound();
-			} else {
-				SoundEffectsHelper.Instance.MakePlayerShotSound();
+			if (!mute) {
+				if (isEnemy) {
+					SoundEffectsHelper.Instance.MakeEnemyShotSound();
+				} else {
+					SoundEffectsHelper.Instance.MakePlayerShotSound();
+				}
 			}
 			
 			// get shot instance's shot script comp

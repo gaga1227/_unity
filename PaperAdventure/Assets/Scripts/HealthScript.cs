@@ -11,6 +11,9 @@ public class HealthScript : MonoBehaviour {
 	// enemy flag
 	public bool isEnemy = true;
 
+	// boss flag
+	public bool isBoss = false;
+
 	// health points
 	public int hp = 1;
 
@@ -91,7 +94,11 @@ public class HealthScript : MonoBehaviour {
 			if (isEnemy) {
 				// update UI score
 				if (MenuControlScript != null) {
-					MenuControlScript.updateScore(damageCount);
+					if (isBoss) {
+						MenuControlScript.updateScore(20);
+					} else {
+						MenuControlScript.updateScore(damageCount);
+					}
 				}
 				// respawn
 				SpawnScript spawn = transform.gameObject.GetComponent<SpawnScript>();

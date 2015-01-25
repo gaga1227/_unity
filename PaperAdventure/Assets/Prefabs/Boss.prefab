@@ -101,22 +101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100012
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400012}
-  - 114: {fileID: 11400004}
-  m_Layer: 0
-  m_Name: WeaponObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100014
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +300,6 @@ Transform:
   - {fileID: 400024}
   - {fileID: 400026}
   - {fileID: 400028}
-  - {fileID: 400012}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400010
@@ -331,18 +314,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400008}
   m_RootOrder: 4
---- !u!4 &400012
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_LocalRotation: {x: 0, y: 0, z: -3.2584137e-07, w: -1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400008}
-  m_RootOrder: 13
 --- !u!4 &400014
 Transform:
   m_ObjectHideFlags: 1
@@ -462,7 +433,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 100008}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Size: {x: 6, y: 6}
   m_Center: {x: 0, y: .200000003}
 --- !u!95 &9500000
@@ -492,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 1
+  isBoss: 1
   hp: 20
   isInvincible: 0
   canvas: {fileID: 0}
@@ -508,21 +480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: {x: 0, y: 0}
-  direction: {x: -1, y: 0}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d7ca353ee50a42ac9fcb963976d56dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shotOriginOffset: {x: 0, y: 0, z: 0}
-  shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
-  shootingRate: 5
+  direction: {x: 0, y: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -548,6 +506,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -562,6 +521,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -576,6 +536,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -590,6 +551,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -604,6 +566,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -618,6 +581,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -632,6 +596,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -646,6 +611,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 0, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 5
+  mute: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
