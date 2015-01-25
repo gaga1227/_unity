@@ -28,13 +28,13 @@ public class SoundEffectsHelper : MonoBehaviour {
 	#region methods
 	// public methods for sounds
 	public void MakeExplosionSound() {
-		MakeSound(explosionSound, 0.6f);
+		MakeSound(explosionSound, 0.5f);
 	}
 	public void MakePlayerShotSound() {
-		MakeSound(playerShotSound, 0.4f);
+		MakeSound(playerShotSound, 0.25f);
 	}
 	public void MakeEnemyShotSound() {
-		MakeSound(enemyShotSound, 1.0f);
+		MakeSound(enemyShotSound, 0.9f);
 	}
 
 	// play a sound clip

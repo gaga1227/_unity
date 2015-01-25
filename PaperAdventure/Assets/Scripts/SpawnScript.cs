@@ -106,10 +106,16 @@ public class SpawnScript : MonoBehaviour {
 		Spawn(false);
 		// reposition
 		Reposition();
-		// disable invincible on respawn
+		// reset instance properties
 		if (healthScript != null) {
-			healthScript.hp = 1;
+			// disable invincible
 			healthScript.isInvincible = false;
+			// reset health
+			healthScript.hp = healthScript.isBoss ? 100 : 1;
+			// reset scale
+			if (healthScript.isBoss) {
+				transform.localScale = new Vector3(1, 1, 1);
+			}
 		}
 	}
 	#endregion

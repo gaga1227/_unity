@@ -10,7 +10,7 @@ public class BossScript : MonoBehaviour {
 	// weapon script ref
 	private WeaponScript[] weapons;
 	// move script ref
-	private MoveScript moveScript;
+	//private MoveScript moveScript;
 	#endregion
 	
 	#region onAwake
@@ -20,7 +20,7 @@ public class BossScript : MonoBehaviour {
 		// find list of weapon script comps only once
 		weapons = GetComponentsInChildren<WeaponScript>();
 		// find move script comp
-		moveScript = GetComponent<MoveScript>();
+		//moveScript = GetComponent<MoveScript>();
 	}
 	#endregion
 	
@@ -32,14 +32,8 @@ public class BossScript : MonoBehaviour {
 	
 	#region onUpdate
 	void Update () {
-		// stop other enemies
-		stopOtherEnemies();
-
-		// set boss stationary
-		moveScript.direction = Vector2.zero;
-
 		// fire weapons
-		fireWeapons();
+		//fireWeapons();
 	}
 	#endregion
 
@@ -48,31 +42,26 @@ public class BossScript : MonoBehaviour {
 		// get script comps from collider
 		HealthScript health = otherCollider2D.gameObject.GetComponent<HealthScript>();
 		ShotScript shot = otherCollider2D.gameObject.GetComponent<ShotScript>();
-		// trigger Hit animation on player
+		// trigger Hit handler on player
 		if (health != null && !health.isEnemy) {
-			animator.SetTrigger("Hit");
+			onHit();
 		}
-		// trigger Hit animation on player shot
+		// trigger Hit handler on player shot
 		if (shot != null && !shot.isEnemyShot) {
-			animator.SetTrigger("Hit");
+			onHit();
 		}
+	}
+
+	// on hit by enemy
+	void onHit() {
+		// switch to hit animation
+		animator.SetTrigger("Hit");
+		// reduce size
+		transform.localScale -= new Vector3(0.005f, 0.005f, 0);
 	}
 	#endregion
 
 	#region methods
-	// stops other enemies from being enabled
-	void stopOtherEnemies() {
-		// Stop the player and main camera scrolling
-		// this will also stop all respawn enemies
-		foreach (ScrollingScript scrolling in FindObjectsOfType<ScrollingScript>()) {
-			// if is scrolling script on Player
-			// set speed to zero to stop player and camera
-			if (scrolling.isLinkedToCamera) {
-				scrolling.speed = Vector2.zero;
-			}
-		}
-	}
-
 	// fire attached weapons
 	void fireWeapons() {
 		// Auto-fire (no input required)

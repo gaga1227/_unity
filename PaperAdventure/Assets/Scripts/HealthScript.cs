@@ -95,7 +95,7 @@ public class HealthScript : MonoBehaviour {
 				// update UI score
 				if (MenuControlScript != null) {
 					if (isBoss) {
-						MenuControlScript.updateScore(20);
+						MenuControlScript.updateScore(100);
 					} else {
 						MenuControlScript.updateScore(damageCount);
 					}
