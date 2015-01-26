@@ -5,6 +5,18 @@ using System.Collections;
 
 public class BossScript : MonoBehaviour {
 	#region vars
+	// boss enabled flag
+	public bool bossIsEnabled;
+	public int spawnScoreThreshold;
+	private int spawnCount;
+
+	// player scrolling script ref
+	private ScrollingScript scrolling;
+	// menu script ref
+	public GameObject menuControl;
+	private MenuScript menuScript;
+	// spawn script ref
+	private SpawnScript spawnScript;
 	// animator comp ref
 	private Animator animator;
 	// weapon script ref
@@ -15,6 +27,15 @@ public class BossScript : MonoBehaviour {
 	
 	#region onAwake
 	void Awake() {
+		// set boss disabled
+		bossIsEnabled = false;
+		spawnCount = 0;
+		// find menu script comp
+		if (menuControl != null) {
+			menuScript = menuControl.GetComponent<MenuScript>();
+		}
+		// find spawn script comp
+		spawnScript = GetComponent<SpawnScript>();
 		// find animator comp
 		animator = GetComponent<Animator>();
 		// find list of weapon script comps only once
@@ -26,7 +47,12 @@ public class BossScript : MonoBehaviour {
 	
 	#region onStart
 	void Start() {
-
+		// find scrolling script comp
+		foreach (ScrollingScript tempScroll in FindObjectsOfType<ScrollingScript>()) {
+			if (tempScroll.isLinkedToCamera) {
+				scrolling = tempScroll;
+			}
+		}
 	}
 	#endregion
 	
@@ -34,6 +60,25 @@ public class BossScript : MonoBehaviour {
 	void Update () {
 		// fire weapons
 		//fireWeapons();
+
+		// check if boss should be Respawned
+		if (menuScript != null) {
+			// if score is a multitude of spawnScoreThreshold
+			if (Mathf.Floor(menuScript.Score / spawnScoreThreshold) <= spawnCount) {
+				// make boss scroll along with player and cam
+				// so it won't be Respawned
+				if (!bossIsEnabled && scrolling != null) {
+					transform.Translate(scrolling.movement);
+				}
+			}
+			// otherwise resume scrolling
+			else {
+				// set boss enabled flag
+				bossIsEnabled = true;
+				// increment spawnCount
+				spawnCount++;
+			}
+		}
 	}
 	#endregion
 

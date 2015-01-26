@@ -494,6 +494,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459b317d3a2574f69a77e1dda4969923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossIsEnabled: 0
+  spawnScoreThreshold: 20
+  menuControl: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -626,7 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasSpawn: 1
-  spawnOffset: {x: 0, y: 2}
+  spawnOffset: {x: 0, y: 3}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

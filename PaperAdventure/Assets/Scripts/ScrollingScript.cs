@@ -10,6 +10,9 @@ public class ScrollingScript : MonoBehaviour {
 	public Vector2 speed = new Vector2(2, 2);
 	public Vector2 direction = new Vector2(-1, 0);
 
+	// scrolling movement vector
+	public Vector3 movement;
+
 	// whether this scrolling object is locked to cam
 	public bool isLinkedToCamera = false;
 
@@ -48,9 +51,8 @@ public class ScrollingScript : MonoBehaviour {
 	
 	#region onUpdate
 	void Update () {
-		// Movement
-		// create temp movement vector
-		Vector3 movement = new Vector3(
+		// Movement vector
+		movement = new Vector3(
 			speed.x * direction.x,
 			speed.y * direction.y,
 			0);

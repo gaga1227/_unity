@@ -9,12 +9,17 @@ public class SpawnScript : MonoBehaviour {
 	public bool hasSpawn;
 	// respawn offset
 	public Vector2 spawnOffset;
+
 	// ref for move script comp
 	private MoveScript moveScript;
 	// ref for health script comp
 	private HealthScript healthScript;
+	// ref for animator comp
+	private Animator animator;
+
 	// weapon comp ref
 	private WeaponScript[] weapons;
+
 	// ref for main cam
 	private Camera mainCam;
 	#endregion
@@ -25,6 +30,8 @@ public class SpawnScript : MonoBehaviour {
 		moveScript = GetComponent<MoveScript>();
 		// find obj's health script comp
 		healthScript = GetComponent<HealthScript>();
+		// find obj's animator comp
+		animator = GetComponent<Animator>();
 		// find list of weapon script comps only once
 		weapons = GetComponentsInChildren<WeaponScript>();
 		// find main camera
@@ -73,6 +80,8 @@ public class SpawnScript : MonoBehaviour {
 		if (collider2D != null) collider2D.enabled = isEnabled;
 		// -- Moving
 		if (moveScript != null) moveScript.enabled = isEnabled;
+		// -- Animation
+		if (animator != null) animator.enabled = isEnabled;
 		// -- Shooting
 		if (weapons != null && weapons.Length > 0) {
 			foreach (WeaponScript weapon in weapons) {
@@ -96,8 +105,9 @@ public class SpawnScript : MonoBehaviour {
 			(camExtH - objExts.y - spawnOffset.y) * Random.Range(-1.0f, 1.0f),
 			transform.position.z);
 		
-		// apply new pos to instance
+		// apply new position/rotation to instance
 		transform.position = newPos;
+		transform.rotation = Quaternion.identity;
 	}
 	
 	// respawn enemy instance
