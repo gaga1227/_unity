@@ -5,16 +5,13 @@ using System.Collections;
 
 public class BossScript : MonoBehaviour {
 	#region vars
-	// boss enabled flag
-	public bool bossIsEnabled;
-	public int spawnScoreThreshold;
-	private int spawnCount;
+	// boss spawn related
+	private float bossCooldown;
+	public float bossSpawnThreshold;
 
 	// player scrolling script ref
 	private ScrollingScript scrolling;
-	// menu script ref
-	public GameObject menuControl;
-	private MenuScript menuScript;
+
 	// spawn script ref
 	private SpawnScript spawnScript;
 	// animator comp ref
@@ -27,13 +24,6 @@ public class BossScript : MonoBehaviour {
 	
 	#region onAwake
 	void Awake() {
-		// set boss disabled
-		bossIsEnabled = false;
-		spawnCount = 0;
-		// find menu script comp
-		if (menuControl != null) {
-			menuScript = menuControl.GetComponent<MenuScript>();
-		}
 		// find spawn script comp
 		spawnScript = GetComponent<SpawnScript>();
 		// find animator comp
@@ -47,6 +37,9 @@ public class BossScript : MonoBehaviour {
 	
 	#region onStart
 	void Start() {
+		// set boss cooldown to threshold
+		bossCooldown = bossSpawnThreshold;
+
 		// find scrolling script comp
 		foreach (ScrollingScript tempScroll in FindObjectsOfType<ScrollingScript>()) {
 			if (tempScroll.isLinkedToCamera) {
@@ -61,22 +54,24 @@ public class BossScript : MonoBehaviour {
 		// fire weapons
 		//fireWeapons();
 
-		// check if boss should be Respawned
-		if (menuScript != null) {
-			// if score is a multitude of spawnScoreThreshold
-			if (Mathf.Floor(menuScript.Score / spawnScoreThreshold) <= spawnCount) {
-				// make boss scroll along with player and cam
-				// so it won't be Respawned
-				if (!bossIsEnabled && scrolling != null) {
+		// TODO: move to spawn script
+		// if boss is disabled (off stage/respawn)
+		if (!spawnScript.hasSpawn) {
+			// if boss is still in cooldown
+			if (bossCooldown > 0) {
+				// start cooldown
+				bossCooldown -= Time.deltaTime;
+				// keep boss moving along with player and cam
+				if (scrolling != null) {
 					transform.Translate(scrolling.movement);
 				}
 			}
-			// otherwise resume scrolling
-			else {
-				// set boss enabled flag
-				bossIsEnabled = true;
-				// increment spawnCount
-				spawnCount++;
+		} 
+		// if boss is enabled (on stage)
+		else {
+			// reset boss cooldown to threshold if not already
+			if (bossCooldown != bossSpawnThreshold) {
+				bossCooldown = bossSpawnThreshold;
 			}
 		}
 	}
