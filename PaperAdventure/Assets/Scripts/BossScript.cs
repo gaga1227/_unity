@@ -5,13 +5,6 @@ using System.Collections;
 
 public class BossScript : MonoBehaviour {
 	#region vars
-	// boss spawn related
-	private float bossCooldown;
-	public float bossSpawnThreshold;
-
-	// player scrolling script ref
-	private ScrollingScript scrolling;
-
 	// spawn script ref
 	private SpawnScript spawnScript;
 	// animator comp ref
@@ -37,15 +30,6 @@ public class BossScript : MonoBehaviour {
 	
 	#region onStart
 	void Start() {
-		// set boss cooldown to threshold
-		bossCooldown = bossSpawnThreshold;
-
-		// find scrolling script comp
-		foreach (ScrollingScript tempScroll in FindObjectsOfType<ScrollingScript>()) {
-			if (tempScroll.isLinkedToCamera) {
-				scrolling = tempScroll;
-			}
-		}
 	}
 	#endregion
 	
@@ -53,27 +37,6 @@ public class BossScript : MonoBehaviour {
 	void Update () {
 		// fire weapons
 		//fireWeapons();
-
-		// TODO: move to spawn script
-		// if boss is disabled (off stage/respawn)
-		if (!spawnScript.hasSpawn) {
-			// if boss is still in cooldown
-			if (bossCooldown > 0) {
-				// start cooldown
-				bossCooldown -= Time.deltaTime;
-				// keep boss moving along with player and cam
-				if (scrolling != null) {
-					transform.Translate(scrolling.movement);
-				}
-			}
-		} 
-		// if boss is enabled (on stage)
-		else {
-			// reset boss cooldown to threshold if not already
-			if (bossCooldown != bossSpawnThreshold) {
-				bossCooldown = bossSpawnThreshold;
-			}
-		}
 	}
 	#endregion
 
@@ -97,7 +60,7 @@ public class BossScript : MonoBehaviour {
 		// switch to hit animation
 		animator.SetTrigger("Hit");
 		// reduce size
-		transform.localScale -= new Vector3(0.005f, 0.005f, 0);
+		transform.localScale -= new Vector3(0.007f, 0.007f, 0);
 	}
 	#endregion
 

@@ -10,6 +10,10 @@ public class SpawnScript : MonoBehaviour {
 	// respawn offset
 	public Vector2 spawnOffset;
 
+	// respawn cooldown
+	public float respawnThreshold;
+	public float respawnCooldown;
+
 	// ref for move script comp
 	private MoveScript moveScript;
 	// ref for health script comp
@@ -22,6 +26,9 @@ public class SpawnScript : MonoBehaviour {
 
 	// ref for main cam
 	private Camera mainCam;
+
+	// player scrolling script ref
+	private ScrollingScript scrollingScript;
 	#endregion
 	
 	#region onAwake
@@ -44,6 +51,16 @@ public class SpawnScript : MonoBehaviour {
 		// init enemy instance as disabled
 		// enable when in cam view
 		Spawn(false);
+
+		// set cooldown to threshold
+		respawnCooldown = respawnThreshold;
+		
+		// find scrolling script comp
+		foreach (ScrollingScript tempScroll in FindObjectsOfType<ScrollingScript>()) {
+			if (tempScroll.isLinkedToCamera) {
+				scrollingScript = tempScroll;
+			}
+		}
 	}
 	#endregion
 	
@@ -56,6 +73,17 @@ public class SpawnScript : MonoBehaviour {
 			if (renderer.IsVisibleFrom(mainCam)) {
 				Spawn(true);
 			}
+
+			// if instance is still in cooldown
+			if (respawnCooldown > 0) {
+				// start cooldown
+				respawnCooldown -= Time.deltaTime;
+				if (healthScript.isEnemy && !healthScript.isBoss) Debug.Log (respawnCooldown);
+				// keep moving along with player and cam
+				if (scrollingScript != null) {
+					transform.Translate(scrollingScript.movement);
+				}
+			}
 		}
 		// if instance is spawn
 		else {
@@ -64,6 +92,11 @@ public class SpawnScript : MonoBehaviour {
 			if (renderer.IsVisibleFrom(mainCam) == false) {
 				Respawn();
 				//Destroy(gameObject);
+			}
+
+			// reset cooldown to threshold if not already
+			if (respawnCooldown != respawnThreshold) {
+				respawnCooldown = respawnThreshold;
 			}
 		}
 	}
@@ -98,15 +131,35 @@ public class SpawnScript : MonoBehaviour {
 		float camExtW = mainCam.aspect * camExtH;
 		
 		// calculate new position
-		Vector3 newPos = new Vector3(
-			// base pos + random x-pos + instance size shift
-			mainCam.transform.position.x + camExtW * Random.Range(1.0f, 3.0f) + objExts.x + spawnOffset.x,
-			// from negative (half view - half instance), to positive
-			(camExtH - objExts.y - spawnOffset.y) * Random.Range(-1.0f, 1.0f),
-			transform.position.z);
+		// from negative (half view - half instance), to positive
+		float newPosX = 0f;
+		float newPosY = (camExtH - objExts.y - spawnOffset.y) * Random.Range(-1.0f, 1.0f);
+		float newPosZ = transform.position.z;
+		// posX calculation based on if is boss
+		if (healthScript != null && healthScript.isBoss) {
+			newPosX = 
+				// base pos
+				mainCam.transform.position.x +
+				// random x-pos
+				camExtW * Random.Range(1.0f, 3.0f) +
+				// instance size
+				objExts.x +
+				// shift
+				spawnOffset.x;
+		} else {
+			newPosX =
+				// base pos
+				mainCam.transform.position.x +
+				// x-pos (make sure boss is respawned off stage)
+				camExtW * 4.0f +
+				// instance size
+				objExts.x +
+				// shift
+				spawnOffset.x;
+		}
 		
 		// apply new position/rotation to instance
-		transform.position = newPos;
+		transform.position = new Vector3(newPosX, newPosY, newPosZ);
 		transform.rotation = Quaternion.identity;
 	}
 	
@@ -121,9 +174,13 @@ public class SpawnScript : MonoBehaviour {
 			// disable invincible
 			healthScript.isInvincible = false;
 			// reset health
-			healthScript.hp = healthScript.isBoss ? 100 : 1;
-			// reset scale
+			healthScript.hp = 1;
+
+			// if is boss
 			if (healthScript.isBoss) {
+				// reser health
+				healthScript.hp = 100;
+				// reset scale
 				transform.localScale = new Vector3(1, 1, 1);
 			}
 		}

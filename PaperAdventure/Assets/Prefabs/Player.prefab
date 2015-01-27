@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotOriginOffset: {x: 1, y: -.600000024, z: 0}
   shotPrefab: {fileID: 400000, guid: 7c6f999e13ec64589926d7b84cb39ef9, type: 2}
-  shootingRate: .0500000007
+  shootingRate: .0799999982
   mute: 0
 --- !u!114 &11400004
 MonoBehaviour:
@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: {x: 1, y: 1}
   direction: {x: 1, y: 0}
+  movement: {x: 0, y: 0, z: 0}
   isLinkedToCamera: 1
   isLooping: 0
 --- !u!212 &21200000

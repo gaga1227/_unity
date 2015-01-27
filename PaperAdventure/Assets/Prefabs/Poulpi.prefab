@@ -61,7 +61,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.8099995, y: -3.8499999, z: 1}
+  m_LocalPosition: {x: 14.8400002, y: 3.48000002, z: 1}
   m_LocalScale: {x: .400000006, y: .400000006, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 1
+  isBoss: 0
   hp: 1
   isInvincible: 0
   canvas: {fileID: 0}
@@ -161,6 +162,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: 1, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 1.5
+  mute: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -186,6 +188,7 @@ MonoBehaviour:
   shotOriginOffset: {x: 0, y: -1, z: 0}
   shotPrefab: {fileID: 400000, guid: 33216db308f364fb49b184ec8447c72e, type: 2}
   shootingRate: 1.5
+  mute: 1
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -199,6 +202,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasSpawn: 0
   spawnOffset: {x: 0, y: .5}
+  respawnThreshold: 0
+  respawnCooldown: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
