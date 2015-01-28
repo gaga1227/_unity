@@ -12,7 +12,7 @@ public class SpawnScript : MonoBehaviour {
 
 	// respawn cooldown
 	public float respawnThreshold;
-	public float respawnCooldown;
+	private float respawnCooldown;
 
 	// ref for move script comp
 	private MoveScript moveScript;
@@ -78,7 +78,6 @@ public class SpawnScript : MonoBehaviour {
 			if (respawnCooldown > 0) {
 				// start cooldown
 				respawnCooldown -= Time.deltaTime;
-				if (healthScript.isEnemy && !healthScript.isBoss) Debug.Log (respawnCooldown);
 				// keep moving along with player and cam
 				if (scrollingScript != null) {
 					transform.Translate(scrollingScript.movement);
@@ -129,33 +128,19 @@ public class SpawnScript : MonoBehaviour {
 		Vector3 objExts = transform.gameObject.renderer.bounds.extents;
 		float camExtH = mainCam.orthographicSize;
 		float camExtW = mainCam.aspect * camExtH;
-		
+
 		// calculate new position
+
+		// base pos + random x-pos + instance size + shift
+		float newPosX = mainCam.transform.position.x + camExtW * Random.Range(1.0f, 3.0f) + objExts.x + spawnOffset.x;
 		// from negative (half view - half instance), to positive
-		float newPosX = 0f;
 		float newPosY = (camExtH - objExts.y - spawnOffset.y) * Random.Range(-1.0f, 1.0f);
+		// use existing z pos
 		float newPosZ = transform.position.z;
-		// posX calculation based on if is boss
+		// overwrite posX calculation if is boss
 		if (healthScript != null && healthScript.isBoss) {
-			newPosX = 
-				// base pos
-				mainCam.transform.position.x +
-				// random x-pos
-				camExtW * Random.Range(1.0f, 3.0f) +
-				// instance size
-				objExts.x +
-				// shift
-				spawnOffset.x;
-		} else {
-			newPosX =
-				// base pos
-				mainCam.transform.position.x +
-				// x-pos (make sure boss is respawned off stage)
-				camExtW * 4.0f +
-				// instance size
-				objExts.x +
-				// shift
-				spawnOffset.x;
+			// base pos + x-pos (make sure boss is respawned off stage) + instance size + shift
+			newPosX = mainCam.transform.position.x + camExtW * 3.0f + objExts.x + spawnOffset.x;
 		}
 		
 		// apply new position/rotation to instance
