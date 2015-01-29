@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7ca353ee50a42ac9fcb963976d56dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotOriginOffset: {x: 1, y: -.600000024, z: 0}
+  shotOriginOffset: {x: 1.5, y: -.879999995, z: 0}
   shotPrefab: {fileID: 400000, guid: 7c6f999e13ec64589926d7b84cb39ef9, type: 2}
   shootingRate: .0799999982
   mute: 0

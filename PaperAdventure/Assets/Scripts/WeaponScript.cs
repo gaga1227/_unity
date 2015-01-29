@@ -28,7 +28,12 @@ public class WeaponScript : MonoBehaviour {
 		}
 	}
 	#endregion
-	
+
+	#region onAwake
+	void Awake () {
+	}
+	#endregion
+
 	#region onStart
 	void Start () {
 		// init cooldown with 0

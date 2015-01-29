@@ -5,6 +5,10 @@ using System.Collections;
 
 public class SoundEffectsHelper : MonoBehaviour {
 	#region vars
+	// game settings
+	private GameObject GameSettingsObj;
+	private SettingsScript gameSettings;
+
 	// Use static keyword for Singleton ref: Instance
 	public static SoundEffectsHelper Instance;
 
@@ -22,6 +26,12 @@ public class SoundEffectsHelper : MonoBehaviour {
 		}
 		// Register this as the singleton instance
 		Instance = this;
+
+		// find game settings ref
+		GameSettingsObj = GameObject.Find("GameSettings");
+		if (GameSettingsObj != null) {
+			gameSettings = GameSettingsObj.GetComponent<SettingsScript>();
+		}
 	}
 	#endregion
 	
@@ -39,6 +49,8 @@ public class SoundEffectsHelper : MonoBehaviour {
 
 	// play a sound clip
 	private void MakeSound(AudioClip originalClip, float vol) {
+		// exit if sound setting is off
+		if (gameSettings != null && !gameSettings.soundEnabled) return;
 		// As it is not 3D audio clip, position doesn't matter
 		AudioSource.PlayClipAtPoint(originalClip, transform.position, vol);
 	}
