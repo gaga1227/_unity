@@ -91,6 +91,10 @@ public class WeaponScript : MonoBehaviour {
 				// reset accumulative scale and damage after release
 				accumulativeScale = 1.0f;
 				accumulativeDamage = 1;
+
+				// set accumulation animation off
+				Animator animator = transform.gameObject.GetComponent<Animator>();
+				if (animator.GetBool("isAccumulating")) animator.SetBool("isAccumulating", false);
 			}
 
 			// play SE
@@ -129,6 +133,10 @@ public class WeaponScript : MonoBehaviour {
 		// accumulating scale and damage
 		if (accumulativeDamage < 100f) accumulativeDamage += 0.25f;
 		if (accumulativeScale < 4f) accumulativeScale += 0.01f;
+
+		// set accumulation animation on
+		Animator animator = transform.gameObject.GetComponent<Animator>();
+		if (!animator.GetBool("isAccumulating")) animator.SetBool("isAccumulating", true);
 	}
 	#endregion
 }
