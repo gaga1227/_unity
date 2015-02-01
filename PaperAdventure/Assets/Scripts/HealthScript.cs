@@ -97,7 +97,7 @@ public class HealthScript : MonoBehaviour {
 					if (isBoss) {
 						MenuControlScript.updateScore(100);
 					} else {
-						MenuControlScript.updateScore(damageCount);
+						MenuControlScript.updateScore(1);
 					}
 				}
 				// respawn

@@ -17,6 +17,11 @@ public class WeaponScript : MonoBehaviour {
 	// mute flag
 	public bool mute = false;
 
+	// accumulative shot release flag
+	private bool shotIsReleased = true;
+	private float accumulativeDamage = 1f;
+	private float accumulativeScale = 1f;
+
 	// cooldown
 	private float shootCooldown;
 	// can attack flag
@@ -70,6 +75,24 @@ public class WeaponScript : MonoBehaviour {
 			shotTransform.position = transform.position + shotOriginOffset;
 			shotTransform.rotation = transform.rotation;
 
+			// if is player shot and accumulative shot not released
+			if (!isEnemy && !shotIsReleased) {
+				// apply accumulative scale and damage to first shot after accumulation
+				shotTransform.localScale = new Vector3(accumulativeScale, accumulativeScale, 1);
+				ShotScript shotScript = shotTransform.GetComponent<ShotScript>();
+				if (shotScript != null) shotScript.damage = (int) accumulativeDamage;
+				
+				// set release flag, making next shot regular
+				shotIsReleased = true;
+				Debug.Log ("Release shot!!!");
+				Debug.Log ("- Damage: " + (int) accumulativeDamage);
+				Debug.Log ("- Scale: " + accumulativeScale);
+
+				// reset accumulative scale and damage after release
+				accumulativeScale = 1.0f;
+				accumulativeDamage = 1;
+			}
+
 			// play SE
 			if (!mute) {
 				if (isEnemy) {
@@ -93,6 +116,19 @@ public class WeaponScript : MonoBehaviour {
 				move.direction = transform.right;
 			}
 		}
+	}
+
+	// Start accumulating shot
+	public void Accumulate(bool isEnemy) {
+		// exit on enemy shot
+		if (isEnemy) return;
+
+		// set release flag
+		shotIsReleased = false;
+
+		// accumulating scale and damage
+		if (accumulativeDamage < 100f) accumulativeDamage += 0.25f;
+		if (accumulativeScale < 4f) accumulativeScale += 0.01f;
 	}
 	#endregion
 }

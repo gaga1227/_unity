@@ -52,24 +52,39 @@ public class PlayerScript : MonoBehaviour {
 				// 'GetButtonDown' only fires on down action, not down state
 				bool shoot = Input.GetButton("Fire1");
 				shoot |= Input.GetButtonDown("Fire3");
+
+				// for accumulativeShoot
+				bool accumulativeShoot = Input.GetButton("Fire2");
 				
 				// Update input info if has touch input
 				if (UtilsHelper.Instance.isTouchInput) {
 					if (Input.touchCount > 0) {
-						Touch touch = Input.GetTouch(0);
-						if (touch.phase == TouchPhase.Began) {
+						// touch 1 - movement and regular shooting
+						Touch touch1 = Input.GetTouch(0);
+						if (touch1.phase == TouchPhase.Began) {
 							shoot = true;
 						}
-						else if (touch.phase == TouchPhase.Moved && touch.phase != TouchPhase.Canceled) {
-							float touchSpeedX = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.x) * touchSensitivityX);
-							float touchSpeedY = Mathf.Lerp(0, 1, Mathf.Abs(touch.deltaPosition.y) * touchSensitivityY);
-							inputX = (touch.deltaPosition.x > 0 ? 1 : -1) * touchSpeedX;
-							inputY = (touch.deltaPosition.y > 0 ? 1 : -1) * touchSpeedY;
+						else if (touch1.phase == TouchPhase.Moved && touch1.phase != TouchPhase.Canceled) {
+							float touchSpeedX = Mathf.Lerp(0, 1, Mathf.Abs(touch1.deltaPosition.x) * touchSensitivityX);
+							float touchSpeedY = Mathf.Lerp(0, 1, Mathf.Abs(touch1.deltaPosition.y) * touchSensitivityY);
+							inputX = (touch1.deltaPosition.x > 0 ? 1 : -1) * touchSpeedX;
+							inputY = (touch1.deltaPosition.y > 0 ? 1 : -1) * touchSpeedY;
 						}
-						else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
+						else if (touch1.phase == TouchPhase.Ended || touch1.phase == TouchPhase.Canceled) {
 							inputX = 0;
 							inputY = 0;
 							shoot = false;
+						}
+
+						// touch 2 - accumulative shooting
+						if (Input.touchCount > 1) {
+							Touch touch2 = Input.GetTouch(1);
+							if (touch2.phase == TouchPhase.Began) {
+								accumulativeShoot = true;
+							}
+							else if (touch2.phase == TouchPhase.Ended || touch2.phase == TouchPhase.Canceled) {
+								accumulativeShoot = false;
+							}
 						}
 					}
 				}
@@ -86,11 +101,19 @@ public class PlayerScript : MonoBehaviour {
 				// if is firing
 				if (shoot) {
 					// find weapon script comp
-					// and call Attack public method
-					// with isEnemy flag (false for Player)
 					WeaponScript weapon = GetComponent<WeaponScript>();
 					if (weapon != null) {
-						weapon.Attack(false);
+						// accumulative shoot
+						if (accumulativeShoot) {
+							// start accumulating shot
+							weapon.Accumulate(false);
+						}
+						// regular shooting
+						else {
+							// call Attack public method
+							// with isEnemy flag (false for Player)
+							weapon.Attack(false);
+						}
 					}
 				}
 				
