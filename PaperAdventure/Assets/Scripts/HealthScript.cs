@@ -191,27 +191,27 @@ public class HealthScript : MonoBehaviour {
 	// collision trigger handler
 	void OnTriggerEnter2D(Collider2D otherCollider) {
 		// get script comp ref from collider -> gameobject -> script comp
-		ShotScript shot = otherCollider.gameObject.GetComponent<ShotScript>();
-		HealthScript health = otherCollider.gameObject.GetComponent<HealthScript>();
+		ShotScript colliderShot = otherCollider.gameObject.GetComponent<ShotScript>();
+		HealthScript colliderHealth = otherCollider.gameObject.GetComponent<HealthScript>();
 
 		// if is hit by a shot instance
-		if (shot != null) {
+		if (colliderShot != null) {
 			// if shot projectile is from other party (avoids friendly fire)
-			if (shot.isEnemyShot != isEnemy) {
+			if (colliderShot.isEnemyShot != isEnemy) {
 				// call damage method
-				Damage(shot.damage);
+				Damage(colliderShot.damage);
 				// destroy shot object immediately, before its self destruction
 				// targets the gameobject of shot, not the script comp itself
-				Destroy(shot.gameObject);
+				Destroy(colliderShot.gameObject);
 			}
 		}
 
 		// if is hit by player instance
-		if (health != null) {
+		if (colliderHealth != null) {
 			// if self and collider is NOT same type
-			if (health.isEnemy != isEnemy) {
+			if (colliderHealth.isEnemy != isEnemy) {
 				// call damage methods
-				health.Damage(1);
+				colliderHealth.Damage(1);
 				Damage(1);
 			}
 		}

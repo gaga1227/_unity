@@ -5,6 +5,10 @@ using System.Collections;
 
 public class WeaponScript : MonoBehaviour {
 	#region vars
+	// game settings
+	private GameObject GameSettingsObj;
+	private SettingsScript gameSettings;
+
 	// shot prefab ref
 	public Vector3 shotOriginOffset = new Vector3(0, 0, 0);
 
@@ -21,6 +25,7 @@ public class WeaponScript : MonoBehaviour {
 	private bool shotIsReleased = true;
 	private float accumulativeDamage = 1f;
 	private float accumulativeScale = 1f;
+	private float accumulativeAlpha = 0f;
 
 	// cooldown
 	private float shootCooldown;
@@ -32,10 +37,32 @@ public class WeaponScript : MonoBehaviour {
 			return shootCooldown <= 0f;
 		}
 	}
+
+	// accumulating shot object
+	private Transform accumulatingShot;
+	private SpriteRenderer accumulatingShotRenderer;
+	private AudioSource accumulatingShotAudioSource;
 	#endregion
 
 	#region onAwake
 	void Awake () {
+		// find game settings ref
+		GameSettingsObj = GameObject.Find("GameSettings");
+		if (GameSettingsObj != null) {
+			gameSettings = GameSettingsObj.GetComponent<SettingsScript>();
+		}
+
+		// find accumulatingShot and renderer
+		// and set initial states
+		accumulatingShot = transform.Find("accumulatingShot");
+		if (accumulatingShot != null) {
+			// renderer
+			accumulatingShotRenderer = accumulatingShot.GetComponent<SpriteRenderer>();
+			if (accumulatingShotRenderer != null) accumulatingShotRenderer.enabled = false;
+			// audio source
+			accumulatingShotAudioSource = accumulatingShot.GetComponent<AudioSource>();
+			if (accumulatingShotAudioSource != null) accumulatingShotAudioSource.enabled = false;
+		}
 	}
 	#endregion
 
@@ -84,17 +111,31 @@ public class WeaponScript : MonoBehaviour {
 				
 				// set release flag, making next shot regular
 				shotIsReleased = true;
-				Debug.Log ("Release shot!!!");
-				Debug.Log ("- Damage: " + (int) accumulativeDamage);
-				Debug.Log ("- Scale: " + accumulativeScale);
+//				Debug.Log ("Release shot!!!");
+//				Debug.Log ("- Damage: " + (int) accumulativeDamage);
+//				Debug.Log ("- Scale: " + accumulativeScale);
+//				Debug.Log ("- Alpha: " + accumulativeAlpha);
 
 				// reset accumulative scale and damage after release
-				accumulativeScale = 1.0f;
-				accumulativeDamage = 1;
+				if (accumulativeScale != 1f) accumulativeScale = 1f;
+				if (accumulativeDamage != 1f) accumulativeDamage = 1f;
+				if (accumulativeAlpha != 0f) accumulativeAlpha = 0f;
 
-				// set accumulation animation off
-				Animator animator = transform.gameObject.GetComponent<Animator>();
-				if (animator.GetBool("isAccumulating")) animator.SetBool("isAccumulating", false);
+				// if found accumulating shot renderer
+				if (accumulatingShotRenderer != null) {
+					// set accumulating shot renderer off
+					// and reset accumulativeScale scale
+					if (accumulatingShotRenderer.enabled) {
+						accumulatingShotRenderer.enabled = false;
+						accumulatingShot.localScale = new Vector3(accumulativeScale*3, accumulativeScale*3, 1);
+					}
+					// stop sfx
+					if (accumulatingShotAudioSource != null) {
+						if (accumulatingShotAudioSource.enabled) {
+							accumulatingShotAudioSource.enabled = false;
+						}
+					}
+				}
 			}
 
 			// play SE
@@ -128,15 +169,32 @@ public class WeaponScript : MonoBehaviour {
 		if (isEnemy) return;
 
 		// set release flag
-		shotIsReleased = false;
+		if (shotIsReleased) shotIsReleased = false;
 
 		// accumulating scale and damage
 		if (accumulativeDamage < 100f) accumulativeDamage += 0.25f;
 		if (accumulativeScale < 4f) accumulativeScale += 0.01f;
+		if (accumulativeAlpha < 1f) accumulativeAlpha += 0.025f;
 
-		// set accumulation animation on
-		Animator animator = transform.gameObject.GetComponent<Animator>();
-		if (!animator.GetBool("isAccumulating")) animator.SetBool("isAccumulating", true);
+		// if found accumulating shot renderer
+		if (accumulatingShotRenderer != null) {
+			// set accumulating shot renderer on
+			if (!accumulatingShotRenderer.enabled) {
+				accumulatingShotRenderer.enabled = true;
+			}
+			// play sfx
+			if (gameSettings == null || (gameSettings != null && gameSettings.soundEnabled)) {
+				if (accumulatingShotAudioSource != null) {
+					if (!accumulatingShotAudioSource.enabled) {
+						accumulatingShotAudioSource.enabled = true;
+					}
+				}
+			}
+			// match scale to accumulativeScale
+			accumulatingShot.localScale = new Vector3(accumulativeScale*3, accumulativeScale*3, 1);
+			// apply alpha transition
+			accumulatingShotRenderer.color = new Color(255, 255, 255, accumulativeAlpha);
+		}
 	}
 	#endregion
 }
