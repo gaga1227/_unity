@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Tap.unity
   - enabled: 1
+    path: Assets/Scenes/Tap.unity
+  - enabled: 0
     path: Assets/TouchScript/Examples/General/2D - Double Tap.unity
