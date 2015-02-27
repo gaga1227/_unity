@@ -49,17 +49,6 @@ public class TapBreaker : MonoBehaviour
 	#region handlers
 	private void tappedHandler (object sender, EventArgs e)
 	{
-//		var tap = sender as TapGesture;
-//		switch (tap.NumberOfTapsRequired) {
-//		case 1:
-//			Debug.Log ("Single Tap");
-//			break;
-//		case 2:
-//			// our double tap gesture
-//			Debug.Log ("Double Tap");
-//			break;
-//		}
-
 		// if we are not too small
 		Debug.Log (transform.name);
 		if (transform.name == "Cube" && transform.localScale.x > 0.05f) {

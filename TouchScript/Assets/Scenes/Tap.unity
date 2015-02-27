@@ -74,6 +74,37 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
+--- !u!1 &129245968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 129245969}
+  m_Layer: 0
+  m_Name: Scene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &129245969
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 129245968}
+  m_LocalRotation: {x: .408217937, y: -.234569728, z: .109381676, w: .875426054}
+  m_LocalPosition: {x: .297459602, y: .0291931629, z: -5.60374308}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1483272613}
+  - {fileID: 1359270428}
+  - {fileID: 788359945}
+  - {fileID: 1200639280}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!1001 &585472010
 Prefab:
   m_ObjectHideFlags: 0
@@ -180,12 +211,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 788359943}
-  m_LocalRotation: {x: .408217937, y: -.234569728, z: .109381676, w: .875426054}
-  m_LocalPosition: {x: .297459602, y: .0291931629, z: -5.60374308}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 129245969}
+  m_RootOrder: 2
 --- !u!1 &1095173875
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +262,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1 &1174782116
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,20 +351,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1200639275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Script: {fileID: 1298086939, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  advancedProps: 0
-  combineTouches: 0
-  combineTouchesInterval: .300000012
-  useSendMessage: 0
-  sendStateChangeMessages: 0
-  sendMessageTarget: {fileID: 0}
-  requireGestureToFail: {fileID: 0}
-  friendlyGestures: []
-  numberOfTapsRequired: 1
-  timeLimit: Infinity
-  distanceLimit: Infinity
+  Name: Main Camera
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!124 &1200639277
 Behaviour:
   m_ObjectHideFlags: 0
@@ -386,12 +410,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1200639275}
-  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalRotation: {x: .330366105, y: .0885212943, z: -.243210375, w: .907673359}
+  m_LocalPosition: {x: 2.54426384, y: 10.2406454, z: -4.42304325}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 129245969}
+  m_RootOrder: 3
 --- !u!1 &1359270424
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,12 +480,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1359270424}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -.408217937, y: .234569728, z: -.109381676, w: .875426054}
+  m_LocalPosition: {x: 2.54426384, y: 3.81277013, z: 3.23740244}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 129245969}
+  m_RootOrder: 1
 --- !u!1 &1483272609
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +499,7 @@ GameObject:
   - 23: {fileID: 1483272610}
   - 54: {fileID: 1483272614}
   - 114: {fileID: 1483272615}
+  - 114: {fileID: 1483272617}
   - 114: {fileID: 1483272616}
   m_Layer: 0
   m_Name: Cube
@@ -528,12 +553,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1483272609}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalRotation: {x: -.408217937, y: .234569728, z: -.109381676, w: .875426054}
+  m_LocalPosition: {x: 2.54426384, y: 4.77695131, z: 2.08833551}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 129245969}
+  m_RootOrder: 0
 --- !u!54 &1483272614
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -561,12 +586,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   advancedProps: 0
-  combineTouches: 1
+  combineTouches: 0
   combineTouchesInterval: .300000012
   useSendMessage: 0
   sendStateChangeMessages: 0
   sendMessageTarget: {fileID: 0}
-  requireGestureToFail: {fileID: 0}
+  requireGestureToFail: {fileID: 1483272615}
   friendlyGestures: []
   numberOfTapsRequired: 1
   timeLimit: Infinity
@@ -583,3 +608,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Power: 10
+--- !u!114 &1483272617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1483272609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  advancedProps: 0
+  combineTouches: 0
+  combineTouchesInterval: .300000012
+  useSendMessage: 0
+  sendStateChangeMessages: 0
+  sendMessageTarget: {fileID: 0}
+  requireGestureToFail: {fileID: 0}
+  friendlyGestures: []
+  numberOfTapsRequired: 2
+  timeLimit: .300000012
+  distanceLimit: Infinity
